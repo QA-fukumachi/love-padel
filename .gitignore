@@ -15,8 +15,11 @@ pnpm-debug.log*
 
 # environment variables
 .env
-.env.production
+.env.*
 
+# build and cache directories
+.vercel/
+.sanity/
 # macOS-specific files
 .DS_Store
 
