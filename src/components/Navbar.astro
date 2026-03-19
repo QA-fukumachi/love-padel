@@ -1,0 +1,450 @@
+---
+import {
+  getTranslations,
+  buildLocalizedPath,
+  getTranslatedSlugPath,
+} from "../utils/i18n";
+
+interface Props {
+  locale: "en" | "ka";
+  translatedSlug?: string;
+  isBlogDetail?: boolean;
+}
+
+const { locale, translatedSlug, isBlogDetail } = Astro.props;
+const t = getTranslations(locale);
+const currentPath = Astro.url.pathname;
+const otherLocale = locale === "en" ? "ka" : "en";
+
+let switcherUrl = buildLocalizedPath(currentPath, otherLocale);
+if (isBlogDetail && translatedSlug) {
+  switcherUrl = getTranslatedSlugPath(currentPath, otherLocale, translatedSlug);
+} else if (isBlogDetail) {
+  switcherUrl = `/${otherLocale}/blog`;
+}
+
+// ── Book Now button: vertical text offset per locale ──────────────────
+// Positive values (mt-1, mt-2) move text DOWN; negative (-mt-1) move UP
+const bookButtonOffset: Record<string, string> = {
+  en: "-mt-1", // ← English offset: adjust to move EN text up/down
+  ka: "-mt-1", // ← Georgian offset: adjust to move KA text up/down
+};
+---
+
+<header
+  id="main-header"
+  class="w-full bg-black pt-0 pb-2 -mt-4 transition-all duration-300 ease-out"
+>
+  <div class="max-w-[1600px] mx-auto px-6 lg:px-12">
+    <div class="flex justify-between items-center">
+      <!-- Logo: Image -->
+      <div class="flex-shrink-0">
+        <a href={`/${locale}`} class="block -ml-4 lg:-ml-8">
+          <img
+            src="/images/logo-red.png"
+            alt="Love Padel"
+            class="h-24 sm:h-28 lg:h-44 w-auto object-contain"
+          />
+        </a>
+      </div>
+
+      <!-- Desktop Nav -->
+      <nav
+        class={`hidden lg:flex space-x-6 xl:space-x-8 items-center font-bold -mt-8 lg:-mt-8 ${locale === "ka" ? "text-lg xl:text-xl" : "text-lg xl:text-xl"}`}
+      >
+        <!-- About Dropdown -->
+        <div class="relative" id="about-dropdown-desktop">
+          <button
+            type="button"
+            class="nav-link-awwwards text-[var(--color-brand-blue)]"
+            id="about-dropdown-btn-desktop"
+            data-text={t["nav.about"]}
+          >
+            <span>{t["nav.about"]}</span>
+          </button>
+          <div
+            id="about-dropdown-menu-desktop"
+            class="absolute left-0 top-full mt-0 min-w-[200px] flex flex-col gap-3 opacity-0 invisible translate-y-2 transition-all duration-200 z-50 pt-4"
+          >
+            <a
+              href={`/${locale}#who-we-are`}
+              class="block text-base font-medium text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+              >{t["nav.about.whoWeAre"]}</a
+            >
+            <a
+              href={`/${locale}#about-padel`}
+              class="block text-base font-medium text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+              >{t["nav.about.aboutPadel"]}</a
+            >
+            <a
+              href={`/${locale}#contact-us`}
+              class="block text-base font-medium text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+              >{t["nav.about.contactUs"]}</a
+            >
+            <a
+              href={`/${locale}/faq`}
+              class="block text-base font-medium text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+              >{t["nav.about.faq"]}</a
+            >
+          </div>
+        </div>
+        <a
+          href={`/${locale}#book`}
+          class="nav-link-awwwards text-[var(--color-brand-red)]"
+          data-text={t["nav.book"]}><span>{t["nav.book"]}</span></a
+        >
+        <!-- Events Dropdown -->
+        <div class="relative" id="events-dropdown-desktop">
+          <button
+            type="button"
+            class="nav-link-awwwards text-[var(--color-brand-blue)]"
+            id="events-dropdown-btn-desktop"
+            data-text={t["nav.events"]}
+          >
+            <span>{t["nav.events"]}</span>
+          </button>
+          <div
+            id="events-dropdown-menu-desktop"
+            class="absolute left-0 top-full mt-0 min-w-[200px] flex flex-col gap-3 opacity-0 invisible translate-y-2 transition-all duration-200 z-50 pt-4"
+          >
+            <a
+              href={`/${locale}#open-play`}
+              class="block text-base font-medium text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+              >{t["nav.events.openPlay"]}</a
+            >
+            <a
+              href={`/${locale}/blog`}
+              class="block text-base font-medium text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+              >{t["nav.events.blog"]}</a
+            >
+          </div>
+        </div>
+        <a
+          href={`/${locale}#coaching`}
+          class="nav-link-awwwards text-[var(--color-brand-red)]"
+          data-text={t["nav.coaching"]}><span>{t["nav.coaching"]}</span></a
+        >
+      </nav>
+
+      <!-- Right Actions: CTA & Switcher -->
+      <div
+        class="hidden lg:flex items-center space-x-8 xl:space-x-12 ml-auto -mt-8 lg:-mt-8"
+      >
+        <a
+          href={`/${locale}/contact`}
+          class={`border-4 border-[var(--color-brand-blue)] text-[var(--color-brand-red)] text-2xl xl:text-3xl px-8 xl:px-10 py-2 xl:py-2.5 rounded-[3rem] hover:bg-[var(--color-brand-blue)] hover:text-white transition-all inline-flex items-center justify-center ${
+            locale === "ka" ? "font-medium" : "font-semibold"
+          }`}
+        >
+          <span class={bookButtonOffset[locale]}>{t["nav.book"]}</span>
+        </a>
+
+        <div
+          class="flex flex-col text-sm font-bold text-[var(--color-brand-red)]"
+        >
+          <a
+            href={locale === "en" ? "#" : switcherUrl}
+            class={`hover:text-white transition-colors ${locale === "en" ? "opacity-100 cursor-default" : "opacity-50"}`}
+          >
+            ENG
+          </a>
+          <a
+            href={locale === "ka" ? "#" : switcherUrl}
+            class={`hover:text-white transition-colors ${locale === "ka" ? "opacity-100 cursor-default" : "opacity-50"}`}
+          >
+            ქარ
+          </a>
+        </div>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div
+        class="flex lg:hidden items-center text-[var(--color-brand-red)] space-x-4"
+      >
+        <div
+          class="flex flex-col text-xs font-bold text-[var(--color-brand-red)] border-r border-[#333] pr-4"
+        >
+          <a
+            href={locale === "en" ? "#" : switcherUrl}
+            class={`${locale === "en" ? "opacity-100" : "opacity-50"}`}>ENG</a
+          >
+          <a
+            href={locale === "ka" ? "#" : switcherUrl}
+            class={`${locale === "ka" ? "opacity-100" : "opacity-50"}`}>ქარ</a
+          >
+        </div>
+        <button
+          type="button"
+          class="mobile-menu-btn p-2"
+          aria-controls="mobile-menu"
+          aria-expanded="false"
+        >
+          <span class="sr-only">Open main menu</span>
+          <svg
+            class="h-8 w-8"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div
+    class="lg:hidden hidden bg-black border-t border-gray-800 mt-4 max-h-[70vh] overflow-y-auto"
+    id="mobile-menu"
+  >
+    <div class="px-6 pt-4 pb-6 flex flex-col items-start space-y-4">
+      <!-- About Dropdown (Mobile) -->
+      <div id="about-dropdown-mobile">
+        <button
+          type="button"
+          class="nav-link-awwwards text-2xl font-bold text-[var(--color-brand-blue)] w-full text-left"
+          id="about-dropdown-btn-mobile"
+          data-text={t["nav.about"]}
+        >
+          <span>{t["nav.about"]}</span>
+        </button>
+        <div
+          id="about-dropdown-menu-mobile"
+          class="hidden pl-4 mt-2 flex flex-col space-y-2 border-l-2 border-[var(--color-brand-blue)]"
+        >
+          <a
+            href={`/${locale}#who-we-are`}
+            class="text-lg text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+            >{t["nav.about.whoWeAre"]}</a
+          >
+          <a
+            href={`/${locale}#about-padel`}
+            class="text-lg text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+            >{t["nav.about.aboutPadel"]}</a
+          >
+          <a
+            href={`/${locale}#contact-us`}
+            class="text-lg text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+            >{t["nav.about.contactUs"]}</a
+          >
+          <a
+            href={`/${locale}/faq`}
+            class="text-lg text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+            >{t["nav.about.faq"]}</a
+          >
+        </div>
+      </div>
+      <a
+        href={`/${locale}#book`}
+        class="nav-link-awwwards text-2xl font-bold text-[var(--color-brand-red)]"
+        data-text={t["nav.book"]}><span>{t["nav.book"]}</span></a
+      >
+      <!-- Events Dropdown (Mobile) -->
+      <div id="events-dropdown-mobile">
+        <button
+          type="button"
+          class="nav-link-awwwards text-2xl font-bold text-[var(--color-brand-blue)] w-full text-left"
+          id="events-dropdown-btn-mobile"
+          data-text={t["nav.events"]}
+        >
+          <span>{t["nav.events"]}</span>
+        </button>
+        <div
+          id="events-dropdown-menu-mobile"
+          class="hidden pl-4 mt-2 flex flex-col space-y-2 border-l-2 border-[var(--color-brand-blue)]"
+        >
+          <a
+            href={`/${locale}#open-play`}
+            class="text-lg text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+            >{t["nav.events.openPlay"]}</a
+          >
+          <a
+            href={`/${locale}/blog`}
+            class="text-lg text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+            >{t["nav.events.blog"]}</a
+          >
+        </div>
+      </div>
+      <a
+        href={`/${locale}#coaching`}
+        class="nav-link-awwwards text-2xl font-bold text-[var(--color-brand-red)]"
+        data-text={t["nav.coaching"]}><span>{t["nav.coaching"]}</span></a
+      >
+      <a
+        href={`/${locale}/contact`}
+        class="w-fit mx-auto mt-8 border-[3px] border-[var(--color-brand-blue)] text-[var(--color-brand-red)] px-10 rounded-[3rem] font-semibold text-3xl inline-flex items-center justify-center py-3 hover:bg-[var(--color-brand-blue)] hover:text-white transition-colors"
+      >
+        <span class={bookButtonOffset[locale]}>{t["nav.book"]}</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const btn = document.querySelector(".mobile-menu-btn");
+  const menu = document.getElementById("mobile-menu");
+
+  if (btn && menu) {
+    btn.addEventListener("click", () => {
+      menu.classList.toggle("hidden");
+    });
+  }
+</script>
+
+<script>
+  // ── About Dropdown (Desktop) ──
+  const deskBtn = document.getElementById("about-dropdown-btn-desktop");
+  const deskMenu = document.getElementById("about-dropdown-menu-desktop");
+  const mainHeader = document.getElementById("main-header");
+
+  // ── Events Dropdown (Desktop) ──
+  const evtDeskBtn = document.getElementById("events-dropdown-btn-desktop");
+  const evtDeskMenu = document.getElementById("events-dropdown-menu-desktop");
+
+  function closeAboutDesktop() {
+    if (deskMenu) {
+      deskMenu.classList.add("opacity-0", "invisible", "translate-y-2");
+      deskMenu.classList.remove("opacity-100", "visible", "translate-y-0");
+    }
+  }
+  function closeEventsDesktop() {
+    if (evtDeskMenu) {
+      evtDeskMenu.classList.add("opacity-0", "invisible", "translate-y-2");
+      evtDeskMenu.classList.remove("opacity-100", "visible", "translate-y-0");
+    }
+  }
+  function collapseHeader() {
+    if (mainHeader) mainHeader.classList.remove("pb-16", "md:pb-20");
+  }
+  function expandHeader() {
+    if (mainHeader) mainHeader.classList.add("pb-16", "md:pb-20");
+  }
+
+  if (deskBtn && deskMenu) {
+    deskBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = !deskMenu.classList.contains("invisible");
+      closeEventsDesktop(); // close the other dropdown
+      if (isOpen) {
+        closeAboutDesktop();
+        collapseHeader();
+      } else {
+        deskMenu.classList.remove("opacity-0", "invisible", "translate-y-2");
+        deskMenu.classList.add("opacity-100", "visible", "translate-y-0");
+        expandHeader();
+      }
+    });
+  }
+
+  if (evtDeskBtn && evtDeskMenu) {
+    evtDeskBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = !evtDeskMenu.classList.contains("invisible");
+      closeAboutDesktop(); // close the other dropdown
+      if (isOpen) {
+        closeEventsDesktop();
+        collapseHeader();
+      } else {
+        evtDeskMenu.classList.remove("opacity-0", "invisible", "translate-y-2");
+        evtDeskMenu.classList.add("opacity-100", "visible", "translate-y-0");
+        expandHeader();
+      }
+    });
+  }
+
+  // Close all when clicking outside
+  document.addEventListener("click", () => {
+    closeAboutDesktop();
+    closeEventsDesktop();
+    collapseHeader();
+  });
+
+  // ── About Dropdown (Mobile) ──
+  const mobBtn = document.getElementById("about-dropdown-btn-mobile");
+  const mobMenu = document.getElementById("about-dropdown-menu-mobile");
+
+  if (mobBtn && mobMenu) {
+    mobBtn.addEventListener("click", () => {
+      mobMenu.classList.toggle("hidden");
+    });
+  }
+
+  // ── Events Dropdown (Mobile) ──
+  const evtMobBtn = document.getElementById("events-dropdown-btn-mobile");
+  const evtMobMenu = document.getElementById("events-dropdown-menu-mobile");
+
+  if (evtMobBtn && evtMobMenu) {
+    evtMobBtn.addEventListener("click", () => {
+      evtMobMenu.classList.toggle("hidden");
+    });
+  }
+
+  // ── Smooth Scrolling for Anchor Links ──
+  document.querySelectorAll('a[href*="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+      // Create a URL object to parse the clicked href
+      const url = new URL((anchor as HTMLAnchorElement).href);
+      // Only intercept if the link points to a hash on the current page
+      // And we actually have a hash to scroll to
+      if (
+        url.pathname === window.location.pathname &&
+        url.hash &&
+        document.getElementById(url.hash.substring(1))
+      ) {
+        const targetId = url.hash.substring(1);
+        const targetElement = document.getElementById(targetId);
+
+        if (targetElement) {
+          e.preventDefault();
+
+          // Close Desktop Dropdowns if open
+          closeAboutDesktop();
+          closeEventsDesktop();
+          collapseHeader();
+
+          // Close Mobile Menu if open
+          const mainMobMenu = document.getElementById("mobile-menu");
+          if (mainMobMenu && !mainMobMenu.classList.contains("hidden")) {
+            mainMobMenu.classList.add("hidden");
+          }
+
+          // Smooth scroll the custom scroll container
+          const mainScroll = document.getElementById("main-scroll");
+          if (mainScroll) {
+            // Calculate absolute position relative to the scroll container
+            const targetPos = targetElement.offsetTop;
+
+            // Custom sexy easing function instead of boring CSS smooth
+            const startPos = mainScroll.scrollTop;
+            const distance = targetPos - startPos;
+            const duration = 800; // ms
+            let start: number | null = null;
+
+            function easeOutQuart(t: number): number {
+              return 1 - --t * t * t * t;
+            }
+
+            function animation(currentTime: number) {
+              if (start === null) start = currentTime;
+              const timeElapsed = currentTime - start;
+              const progress = Math.min(timeElapsed / duration, 1);
+
+              mainScroll!.scrollTop =
+                startPos + distance * easeOutQuart(progress);
+
+              if (timeElapsed < duration) {
+                requestAnimationFrame(animation);
+              }
+            }
+            requestAnimationFrame(animation);
+          }
+        }
+      }
+    });
+  });
+</script>

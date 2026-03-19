@@ -1,0 +1,113 @@
+---
+import { getTranslations } from "../utils/i18n";
+
+interface Props {
+  locale: "en" | "ka";
+}
+
+const { locale } = Astro.props;
+const t = getTranslations(locale);
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-black py-4 border-t border-[#111] shrink-0">
+  <div class="max-w-[1600px] mx-auto px-4 lg:px-12">
+    <!-- Desktop: flex end, Mobile: grid with columns -->
+    <div
+      class="flex flex-col lg:flex-row lg:justify-end gap-8 lg:gap-32 w-full"
+    >
+      <!-- Container for Mobile row / Desktop items -->
+      <div
+        class="grid grid-cols-3 gap-2 sm:gap-4 lg:flex lg:flex-row lg:gap-32 w-full lg:w-auto text-center lg:text-left justify-items-center lg:justify-items-auto"
+      >
+        <!-- Policies -->
+        <div
+          class="flex flex-col space-y-1 items-center lg:items-start text-center lg:text-left"
+        >
+          <h3
+            class="text-base lg:text-lg font-bold text-[var(--color-brand-red)] mb-0"
+          >
+            {t["footer.policies.title"]}
+          </h3>
+          <a
+            href={locale === "ka" ? "/docs/terms_ka.pdf" : "/docs/terms_en.pdf"}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-[var(--color-brand-red)] text-[10px] lg:text-sm hover:opacity-80 transition-opacity whitespace-normal lg:whitespace-nowrap"
+            >{t["footer.terms"]}</a
+          >
+          <a
+            href={locale === "ka" ? "/docs/terms_ka.pdf" : "/docs/terms_en.pdf"}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-[var(--color-brand-red)] text-[10px] lg:text-sm hover:opacity-80 transition-opacity break-words hyphens-auto text-center lg:text-left"
+            >{t["footer.privacy"]}</a
+          >
+          <a
+            href={`/${locale}/faq`}
+            class="text-[var(--color-brand-red)] text-[10px] lg:text-sm hover:opacity-80 transition-opacity whitespace-normal lg:whitespace-nowrap break-words text-center lg:text-left"
+            >{t["nav.about.faq"]}</a
+          >
+        </div>
+
+        <!-- Socials -->
+        <div
+          class="flex flex-col space-y-1 items-center lg:items-start text-center lg:text-left"
+        >
+          <h3
+            class="text-base lg:text-lg font-bold text-[var(--color-brand-blue)] mb-0"
+          >
+            {t["footer.socials.title"]}
+          </h3>
+          <a
+            href="https://www.instagram.com/lovepadelkutaisi/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-[var(--color-brand-blue)] text-[10px] lg:text-sm hover:opacity-80 transition-opacity"
+            >Instagram</a
+          >
+          <a
+            href="https://tiktok.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-[var(--color-brand-blue)] text-[10px] lg:text-sm hover:opacity-80 transition-opacity"
+            >Tiktok</a
+          >
+          <a
+            href="https://facebook.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-[var(--color-brand-blue)] text-[10px] lg:text-sm hover:opacity-80 transition-opacity"
+            >Facebook</a
+          >
+        </div>
+
+        <!-- Contact us -->
+        <div
+          class="flex flex-col space-y-1 items-center lg:items-start text-center lg:text-left"
+        >
+          <h3
+            class="text-base lg:text-lg font-bold text-[var(--color-brand-red)] mb-0 whitespace-normal lg:whitespace-nowrap"
+          >
+            {t["footer.contactUs.title"]}
+          </h3>
+          <a
+            href="tel:+995598321555"
+            class="text-[var(--color-brand-red)] text-[10px] lg:text-sm hover:opacity-80 transition-opacity whitespace-normal lg:whitespace-nowrap cursor-pointer"
+            >+995 598 321 555</a
+          >
+          <p
+            class="text-[var(--color-brand-red)] text-[10px] lg:text-sm whitespace-normal lg:whitespace-nowrap break-words hyphens-auto"
+          >
+            {t["footer.address.value"]}
+          </p>
+          <a
+            href="mailto:lovepadelkutaisi@gmail.com"
+            class="text-[var(--color-brand-red)] text-[10px] lg:text-sm hover:opacity-80 transition-opacity break-all lg:break-normal cursor-pointer"
+            >lovepadelkutaisi<br class="lg:hidden" />@gmail.com</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

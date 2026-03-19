@@ -1,0 +1,72 @@
+---
+import { urlFor } from "../sanity/client";
+
+interface Props {
+  title: string;
+  slug: string;
+  excerpt?: string;
+  image?: any;
+  publishDate: string;
+  author?: string;
+  locale: "en" | "ka";
+}
+
+const { title, slug, excerpt, image, publishDate, author, locale } =
+  Astro.props;
+let imageUrl = "/images/placeholder-blog.jpg";
+if (image) {
+  imageUrl = urlFor(image).width(800).height(500).url();
+}
+
+const formattedDate = new Date(publishDate).toLocaleDateString(
+  locale === "ka" ? "ka-GE" : "en-US",
+  {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  },
+);
+---
+
+<a
+  href={`/${locale}/blog/${slug}`}
+  class="group block bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow overflow-hidden border border-gray-100 flex flex-col h-full"
+>
+  <div
+    class="aspect-w-16 aspect-h-10 w-full overflow-hidden bg-gray-100 relative"
+  >
+    <img
+      src={imageUrl}
+      alt={image?.alt || title}
+      class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+      loading="lazy"
+    />
+  </div>
+  <div class="p-6 flex-grow flex flex-col justify-between">
+    <div>
+      <div class="flex items-center gap-2 mb-2">
+        <p class="text-sm !text-gray-500">{formattedDate}</p>
+        {
+          author && (
+            <>
+              <span class="!text-gray-300">•</span>
+              <p class="text-sm font-medium !text-gray-700">{author}</p>
+            </>
+          )
+        }
+      </div>
+      <h3
+        class="text-xl font-bold !text-gray-900 group-hover:!text-[var(--color-brand-blue)] transition-colors line-clamp-2 mb-3"
+      >
+        {title}
+      </h3>
+      {
+        excerpt && (
+          <p class="!text-gray-600 line-clamp-3 text-sm leading-relaxed">
+            {excerpt}
+          </p>
+        )
+      }
+    </div>
+  </div>
+</a>

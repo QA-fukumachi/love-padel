@@ -1,0 +1,27 @@
+{
+  "name": "eccentric-earth",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/tailwind": "^6.0.2",
+    "@astrojs/vercel": "^9.0.4",
+    "@iconify-json/mdi": "^1.2.3",
+    "@sanity/client": "^7.16.0",
+    "@sanity/image-url": "^1.2.0",
+    "@tailwindcss/typography": "^0.5.19",
+    "@tailwindcss/vite": "^4.2.1",
+    "astro": "^5.17.1",
+    "astro-i18next": "^1.0.0-beta.21",
+    "astro-icon": "^1.1.5",
+    "astro-portabletext": "^0.11.4",
+    "gsap": "^3.14.2",
+    "i18next": "^25.8.14",
+    "tailwindcss": "^4.2.1"
+  }
+}

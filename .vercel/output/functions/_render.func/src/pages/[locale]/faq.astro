@@ -1,0 +1,115 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import FAQAccordion from "../../components/FAQAccordion.astro";
+import { getTranslations, isValidLocale } from "../../utils/i18n";
+
+const { locale } = Astro.params;
+
+if (!locale || !isValidLocale(locale)) {
+    return new Response(null, { status: 404, statusText: "Not found" });
+}
+
+const t = getTranslations(locale);
+
+const faqCategories = [
+    {
+        id: "general",
+        title: t["faq.category.general"],
+        items: [
+            { q: t["faq.general.q1"], a: t["faq.general.a1"] },
+            { q: t["faq.general.q2"], a: t["faq.general.a2"] },
+            { q: t["faq.general.q3"], a: t["faq.general.a3"] },
+            { q: t["faq.general.q4"], a: t["faq.general.a4"] },
+            { q: t["faq.general.q5"], a: t["faq.general.a5"] },
+        ],
+    },
+    {
+        id: "booking",
+        title: t["faq.category.booking"],
+        items: [
+            { q: t["faq.booking.q1"], a: t["faq.booking.a1"] },
+            { q: t["faq.booking.q2"], a: t["faq.booking.a2"] },
+            { q: t["faq.booking.q3"], a: t["faq.booking.a3"] },
+        ],
+    },
+    {
+        id: "equipment",
+        title: t["faq.category.equipment"],
+        items: [
+            { q: t["faq.equipment.q1"], a: t["faq.equipment.a1"] },
+            { q: t["faq.equipment.q2"], a: t["faq.equipment.a2"] },
+            { q: t["faq.equipment.q3"], a: t["faq.equipment.a3"] },
+        ],
+    },
+    {
+        id: "lessons",
+        title: t["faq.category.lessons"],
+        items: [
+            { q: t["faq.lessons.q1"], a: t["faq.lessons.a1"] },
+            { q: t["faq.lessons.q2"], a: t["faq.lessons.a2"] },
+            { q: t["faq.lessons.q3"], a: t["faq.lessons.a3"] },
+        ],
+    },
+    {
+        id: "facilities",
+        title: t["faq.category.facilities"],
+        items: [
+            { q: t["faq.facilities.q1"], a: t["faq.facilities.a1"] },
+            { q: t["faq.facilities.q2"], a: t["faq.facilities.a2"] },
+            { q: t["faq.facilities.q3"], a: t["faq.facilities.a3"] },
+        ],
+    },
+    {
+        id: "events",
+        title: t["faq.category.events"],
+        items: [
+            { q: t["faq.events.q1"], a: t["faq.events.a1"] },
+            { q: t["faq.events.q2"], a: t["faq.events.a2"] },
+            { q: t["faq.events.q3"], a: t["faq.events.a3"] },
+        ],
+    },
+];
+---
+
+<BaseLayout
+    title={`${t["faq.title"]} | Love Padel`}
+    description={t["faq.title"]}
+    locale={locale}
+    hideScrollIndicator={true}
+>
+    <section class="w-full bg-black pt-32 pb-20">
+        <div class="max-w-[1600px] mx-auto px-6 lg:px-12">
+            <h1
+                class="text-4xl md:text-7xl font-bold text-[var(--color-brand-red)] mb-16 tracking-tight uppercase"
+            >
+                {t["faq.title"]}
+            </h1>
+
+            <div class="space-y-20">
+                {
+                    faqCategories.map((category) => (
+                        <div id={category.id} class="category-block">
+                            <h2 class="text-2xl md:text-3xl font-bold text-[var(--color-brand-blue)] mb-8 uppercase tracking-wider border-l-4 border-[var(--color-brand-blue)] pl-6">
+                                {category.title}
+                            </h2>
+                            <div class="border-t border-gray-800">
+                                {category.items.map((item) => (
+                                    <FAQAccordion
+                                        question={item.q}
+                                        answer={item.a}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    ))
+                }
+            </div>
+        </div>
+    </section>
+</BaseLayout>
+
+<style>
+    .category-block {
+        scroll-margin-top: 100px;
+    }
+</style>

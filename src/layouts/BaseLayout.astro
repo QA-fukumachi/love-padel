@@ -1,0 +1,223 @@
+---
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  locale: "en" | "ka";
+  translatedSlug?: string;
+  isBlogDetail?: boolean;
+  hideScrollIndicator?: boolean;
+  hideFooterAtTop?: boolean;
+}
+
+const {
+  title,
+  description = "Padel Court in Kutaisi",
+  locale,
+  translatedSlug,
+  isBlogDetail = false,
+  hideScrollIndicator = false,
+  hideFooterAtTop = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content={description} />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Noto+Sans+Georgian:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+
+    <style is:global>
+      /* Force hide all scrollbars globally */
+      html::-webkit-scrollbar,
+      body::-webkit-scrollbar,
+      main::-webkit-scrollbar,
+      #main-scroll::-webkit-scrollbar,
+      *::-webkit-scrollbar {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        background: transparent !important;
+      }
+
+      html,
+      body,
+      main,
+      #main-scroll {
+        scrollbar-width: none !important; /* Firefox */
+        -ms-overflow-style: none !important; /* IE and Edge */
+      }
+    </style>
+  </head>
+  <body
+    class="flex flex-col h-[100dvh] overflow-hidden font-sans text-white bg-black"
+    data-hide-footer-at-top={hideFooterAtTop ? "true" : "false"}
+  >
+    <!-- Scroll progress bar -->
+    <div id="scroll-progress" aria-hidden="true"></div>
+
+    <!-- Custom Padel Ball Cursor -->
+    <div id="padel-cursor" aria-hidden="true"></div>
+
+    <Navbar
+      locale={locale}
+      translatedSlug={translatedSlug}
+      isBlogDetail={isBlogDetail}
+    />
+    <main
+      class="flex-grow flex flex-col overflow-y-auto relative"
+      id="main-scroll"
+    >
+      <slot />
+      <!-- Scroll down indicator (shown over hero, hidden after first scroll) -->
+      {
+        !hideScrollIndicator && (
+          <div id="scroll-indicator" aria-hidden="true">
+            <div class="si-mouse">
+              <div class="si-dot" />
+            </div>
+            <div class="si-chevrons">
+              <>
+                <i />
+                <i />
+                <i />
+              </>
+            </div>
+            <span>scroll</span>
+          </div>
+        )
+      }
+      <!-- Add empty space at the absolute bottom of the scroll container so content isn't covered by the footer when stopped -->
+      <div id="footer-spacer" class="w-full shrink-0"></div>
+    </main>
+
+    <!-- Footer container overlay to prevent reserving empty flex space -->
+    <div
+      id="footer-container"
+      class={`fixed bottom-0 left-0 w-full z-40 transition-all duration-300 ease-out ${hideFooterAtTop ? "opacity-0 pointer-events-none translate-y-full" : "opacity-100 transform translate-y-0"}`}
+    >
+      <Footer locale={locale} />
+    </div>
+
+    <script>
+      // ── Padel Ball Cursor ──
+      const cursor = document.getElementById("padel-cursor")!;
+      let mouseX = -100,
+        mouseY = -100;
+      let curX = -100,
+        curY = -100;
+      document.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+      function animate() {
+        curX += (mouseX - curX) * 0.18;
+        curY += (mouseY - curY) * 0.18;
+        cursor.style.transform = `translate(${curX - 18}px, ${curY - 18}px)`;
+        requestAnimationFrame(animate);
+      }
+      animate();
+      const hoverables = document.querySelectorAll(
+        'nav a, header div.hidden.md\\:flex a[href*="/contact"]',
+      );
+      hoverables.forEach((el) => {
+        el.addEventListener("mouseenter", () =>
+          cursor.classList.add("cursor-hover"),
+        );
+        el.addEventListener("mouseleave", () =>
+          cursor.classList.remove("cursor-hover"),
+        );
+      });
+
+      // Hide cursor over iframes (like YouTube player) because they hijack the pointer
+      const iframes = document.querySelectorAll("iframe");
+      iframes.forEach((ifr) => {
+        ifr.addEventListener("mouseenter", () => {
+          cursor.style.opacity = "0";
+        });
+        ifr.addEventListener("mouseleave", () => {
+          cursor.style.opacity = "1";
+        });
+      });
+
+      // ── Scroll progress bar ──
+      const progressBar = document.getElementById("scroll-progress");
+      const mainEl = document.getElementById("main-scroll");
+      const scrollIndicator = document.getElementById("scroll-indicator");
+      let indicatorHidden = false;
+
+      if (mainEl && progressBar) {
+        mainEl.addEventListener(
+          "scroll",
+          () => {
+            const { scrollTop, scrollHeight, clientHeight } = mainEl;
+            const pct =
+              scrollHeight === clientHeight
+                ? 0
+                : (scrollTop / (scrollHeight - clientHeight)) * 100;
+            progressBar.style.width = pct + "%";
+
+            // Hide scroll indicator once user starts scrolling
+            if (!indicatorHidden && scrollTop > 40 && scrollIndicator) {
+              indicatorHidden = true;
+              scrollIndicator.style.transition =
+                "opacity 0.6s ease, transform 0.6s ease";
+              scrollIndicator.style.opacity = "0";
+              scrollIndicator.style.transform =
+                "translateX(-50%) translateY(12px)";
+            }
+
+            // ── Footer Scroll Logic ──
+            const footerContainer = document.getElementById("footer-container");
+            const footerSpacer = document.getElementById("footer-spacer");
+
+            if (footerContainer && footerSpacer) {
+              // Calculate height to slide exactly out of view
+              const footerHeight = footerContainer.offsetHeight;
+              footerSpacer.style.height = `${footerHeight}px`;
+
+              // Apply fast and smooth transition rules
+              footerContainer.style.transition =
+                "opacity 0.25s ease-out, transform 0.25s ease-out";
+
+              // Make it disappear almost immediately (after 5px of scrolling)
+              const isAtTop = scrollTop <= 5;
+
+              // Check if we are at the very bottom
+              // The "- 2" gives a tiny breathing room for browser rounding pixels on different zooms
+              const isAtBottom =
+                Math.ceil(scrollTop + clientHeight) >= scrollHeight - 2;
+
+              const hideFooterAtTop =
+                document.body.dataset.hideFooterAtTop === "true";
+
+              if (isAtBottom || (!hideFooterAtTop && isAtTop)) {
+                // Show Footer Box entirely
+                footerContainer.style.opacity = "1";
+                footerContainer.style.pointerEvents = "auto";
+                footerContainer.style.transform = "translateY(0)";
+              } else {
+                // Hide Footer Box completely off screen
+                footerContainer.style.opacity = "0";
+                footerContainer.style.pointerEvents = "none";
+                // Slide the entire black box totally out of view downwards
+                footerContainer.style.transform = `translateY(${footerHeight}px)`;
+              }
+            }
+          },
+          { passive: true },
+        );
+      }
+    </script>
+  </body>
+</html>

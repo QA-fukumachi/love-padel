@@ -1,0 +1,300 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-brand-red: #e63529;
+  --color-brand-lightblue: #38a1da;
+  --color-brand-blue: #38a1da;
+  --font-sans: "Noto Sans", sans-serif;
+}
+
+body {
+  background-color: #000000;
+  color: #ffffff;
+  cursor: none;
+  overflow-x: hidden;
+}
+
+/* Force hide all scrollbars globally */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+main::-webkit-scrollbar,
+#main-scroll::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+html,
+body {
+  scrollbar-width: none !important;
+  /* Firefox */
+  -ms-overflow-style: none !important;
+  /* IE and Edge */
+}
+
+* {
+  cursor: none !important;
+}
+
+/* ── Custom Padel Ball Cursor ── */
+#padel-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  will-change: transform;
+  transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+  /* 
+   * Custom padel ball PNG cursor
+   * Scaled slightly greater than 100% to fill the circle
+   * (compensates if the image has transparent padding around the ball)
+   */
+  background-image: url('/padel-ball.png');
+  background-size: 140%;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  /* Drop shadow for depth on the page */
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.6));
+}
+
+/* Hide custom cursor on touch / mobile devices */
+@media (pointer: coarse) {
+  #padel-cursor {
+    display: none !important;
+  }
+}
+
+/* Enlarge cursor when hovering interactive elements */
+#padel-cursor.cursor-hover {
+  width: 52px;
+  height: 52px;
+}
+
+html[lang="ka"] {
+  --font-sans: "Noto Sans Georgian", sans-serif;
+}
+
+@layer components {
+
+  /* Awwwards Navigation Link Animation */
+  .nav-link-awwwards {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    padding-bottom: 2px;
+  }
+
+  /* The hidden sliding text */
+  .nav-link-awwwards::before {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translateY(120%);
+    transition: transform 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+    color: currentColor;
+  }
+
+  /* Expanding underline */
+  .nav-link-awwwards::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+  }
+
+  /* Target the inner span */
+  .nav-link-awwwards span {
+    display: inline-block;
+    transition: transform 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+  }
+
+  /* Hover states */
+  .nav-link-awwwards:hover::before {
+    transform: translateY(0);
+  }
+
+  .nav-link-awwwards:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+  }
+
+  .nav-link-awwwards:hover span {
+    transform: translateY(-120%);
+  }
+}
+
+/* ── Hide native scrollbar ── */
+main {
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE/Edge */
+}
+
+main::-webkit-scrollbar {
+  display: none;
+  /* Chrome/Safari */
+}
+
+/* ── Scroll progress bar (top of viewport) ── */
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--color-brand-blue), var(--color-brand-red));
+  z-index: 99998;
+  transition: width 0.05s linear;
+  transform-origin: left;
+}
+
+/* ── Scroll down indicator ── */
+#scroll-indicator {
+  position: absolute;
+  bottom: 16rem;
+  /* Just high enough to clear the footer on vertical mobile */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  z-index: 10;
+  animation: si-fade-in 1.2s 0.8s both;
+}
+
+/* Move indicator up significantly on mobile landscape so it's not hidden */
+@media (max-height: 500px) and (orientation: landscape) {
+  #scroll-indicator {
+    bottom: 9rem;
+    /* Moved higher up for landscape */
+    transform: translateX(-50%) scale(0.7);
+  }
+}
+
+@media (min-width: 768px) {
+  #scroll-indicator {
+    bottom: 10rem;
+  }
+}
+
+#scroll-indicator span {
+  display: block;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* The animated mouse shell */
+.si-mouse {
+  width: 22px;
+  height: 34px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* The bouncing dot inside */
+.si-dot {
+  width: 3px;
+  height: 7px;
+  background: var(--color-brand-blue);
+  border-radius: 2px;
+  position: absolute;
+  left: 50%;
+  top: 5px;
+  transform: translateX(-50%);
+  animation: si-scroll 1.8s cubic-bezier(0.76, 0, 0.24, 1) infinite;
+}
+
+/* Chevron arrows below the mouse */
+.si-chevrons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+.si-chevrons i {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-right: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.3);
+  transform: rotate(45deg);
+  animation: si-pulse 1.8s ease infinite;
+}
+
+.si-chevrons i:nth-child(2) {
+  animation-delay: 0.15s;
+  opacity: 0.6;
+}
+
+.si-chevrons i:nth-child(3) {
+  animation-delay: 0.3s;
+  opacity: 0.3;
+}
+
+@keyframes si-scroll {
+  0% {
+    top: 5px;
+    opacity: 1;
+  }
+
+  60% {
+    top: 18px;
+    opacity: 0.4;
+  }
+
+  61% {
+    top: 5px;
+    opacity: 0;
+  }
+
+  100% {
+    top: 5px;
+    opacity: 1;
+  }
+}
+
+@keyframes si-pulse {
+
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes si-fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
