@@ -42,12 +42,14 @@ const isGeorgian = locale === "ka";
 
 <BaseLayout
   title={`${post.title} | Love Padel`}
-  description={post.title}
+  description={post.excerpt || post.title}
   locale={locale}
   translatedSlug={post.translatedSlug}
   isBlogDetail={true}
   hideScrollIndicator={true}
   hideFooterAtTop={true}
+  image={imageUrl}
+  article={true}
 >
   <div
     id="reading-progress"

@@ -11,6 +11,8 @@ interface Props {
   isBlogDetail?: boolean;
   hideScrollIndicator?: boolean;
   hideFooterAtTop?: boolean;
+  image?: string;
+  article?: boolean;
 }
 
 const {
@@ -21,6 +23,8 @@ const {
   isBlogDetail = false,
   hideScrollIndicator = false,
   hideFooterAtTop = false,
+  image,
+  article = false,
 } = Astro.props;
 ---
 
@@ -30,14 +34,28 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={article ? "article" : "website"} />
+    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site)} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {image && <meta property="og:image" content={new URL(image, Astro.site)} />}
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={new URL(Astro.url.pathname, Astro.site)} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {image && <meta name="twitter:image" content={new URL(image, Astro.site)} />}
+
     <link
       href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Noto+Sans+Georgian:wght@100..900&display=swap"
       rel="stylesheet"
-    />
-    <title>{title}</title>
-
-    <style is:global>
+    />    <style is:global>
       /* Force hide all scrollbars globally */
       html::-webkit-scrollbar,
       body::-webkit-scrollbar,
