@@ -6,6 +6,7 @@ import "../styles/global.css";
 interface Props {
   title: string;
   description?: string;
+  keywords?: string;
   locale: "en" | "ka";
   translatedSlug?: string;
   isBlogDetail?: boolean;
@@ -18,6 +19,7 @@ interface Props {
 const {
   title,
   description = "Padel Court in Kutaisi",
+  keywords = "padel, kutaisi, padel club, georgia, tennis, sport",
   locale,
   translatedSlug,
   isBlogDetail = false,
@@ -36,6 +38,7 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
 
     <!-- Open Graph -->
