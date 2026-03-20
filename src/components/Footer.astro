@@ -37,13 +37,6 @@ const currentYear = new Date().getFullYear();
             >{t["footer.terms"]}</a
           >
           <a
-            href={locale === "ka" ? "/docs/terms_ka.pdf" : "/docs/terms_en.pdf"}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-[var(--color-brand-red)] text-[10px] lg:text-sm hover:opacity-80 transition-opacity break-words hyphens-auto text-center lg:text-left"
-            >{t["footer.privacy"]}</a
-          >
-          <a
             href={`/${locale}/faq`}
             class="text-[var(--color-brand-red)] text-[10px] lg:text-sm hover:opacity-80 transition-opacity whitespace-normal lg:whitespace-nowrap break-words text-center lg:text-left"
             >{t["nav.about.faq"]}</a
