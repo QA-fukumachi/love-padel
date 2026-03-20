@@ -1,4 +1,4 @@
-import { sanityClient } from "../../sanity/client";
+import { sanityClient } from "../sanity/client";
 
 export const GET = async () => {
     // Query Sanity for all blog posts, selecting only the necessary fields
