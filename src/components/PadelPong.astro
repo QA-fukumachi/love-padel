@@ -3,7 +3,7 @@
 ---
 
 <section
-    class="w-full py-1.5 bg-black flex flex-col items-center"
+    class="w-full py-4 flex flex-col items-center bg-transparent drop-shadow-lg"
     id="pong-game"
 >
     <h2
@@ -41,40 +41,62 @@
         id="game-container"
         class="hidden flex-col items-center gap-1 w-full px-2"
     >
-        <!-- Score Display -->
-        <div class="flex gap-12 text-lg font-bold">
-            <span id="score-left" class="text-[#38a1da]">0</span>
-            <span class="text-gray-600">—</span>
-            <span id="score-right" class="text-[#e63529]">0</span>
+        <!-- Game Header: controls and score -->
+        <div class="flex justify-between items-center w-full max-w-[1000px] px-2 mb-2">
+            <button id="end-game-btn" class="text-xs md:text-sm font-semibold text-gray-400 hover:text-[#e63529] transition-all w-16 text-left" title="Quit match and choose sides">Quit</button>
+            <div class="flex gap-12 text-lg font-bold">
+                <span id="score-left" class="text-[#38a1da]">0</span>
+                <span class="text-gray-600">—</span>
+                <span id="score-right" class="text-[#e63529]">0</span>
+            </div>
+            <button id="pause-btn" class="text-xs md:text-sm font-semibold text-gray-400 hover:text-white transition-all w-16 text-right" title="Pause / Resume">Pause</button>
         </div>
-        <div class="relative w-full flex justify-center">
-            <canvas
-                id="pong"
-                class="rounded-xl border-2 border-gray-800 bg-black block"
-                style="touch-action: none; width: 100%; max-width: 800px; display: block;"
-            ></canvas>
-            <!-- Winner Overlay -->
-            <div
-                id="winner-overlay"
-                class="hidden absolute inset-0 flex flex-col items-center justify-center rounded-xl bg-black/80"
-            >
-                <p id="winner-text" class="text-3xl font-bold text-white mb-5">
-                </p>
-                <button
-                    id="play-again"
-                    class="px-7 py-2.5 text-base font-bold border-4 border-white text-white rounded-full hover:bg-white hover:text-black transition-all"
+        
+        <div class="w-full flex justify-center">
+            <div class="relative inline-block">
+                <canvas
+                    id="pong"
+                    class="rounded-xl border-2 border-white/20 bg-[#1e73be] block drop-shadow-2xl"
+                    style="touch-action: none; width: 100%; max-width: 1000px; display: block;"
+                ></canvas>
+                
+                <!-- Pause Overlay -->
+                <div
+                    id="pause-overlay"
+                    class="hidden absolute inset-0 flex-col items-center justify-center rounded-xl bg-black/70 backdrop-blur-sm z-20"
                 >
-                    Play Again
-                </button>
-                <button
-                    id="change-side"
-                    class="mt-2 px-7 py-2 text-sm font-semibold text-gray-400 hover:text-white transition-all"
+                    <p class="text-3xl md:text-4xl font-bold text-white mb-6 tracking-[0.2em] uppercase">Paused</p>
+                    <button
+                        id="resume-btn-large"
+                        class="px-8 py-3 text-base font-bold border-4 border-white text-white rounded-full hover:bg-white hover:text-black transition-all"
+                    >
+                        Resume Game
+                    </button>
+                </div>
+
+                <!-- Winner Overlay -->
+                <div
+                    id="winner-overlay"
+                    class="hidden absolute inset-0 flex-col items-center justify-center rounded-xl bg-black/80 z-20"
                 >
-                    Change Side
-                </button>
+                    <p id="winner-text" class="text-3xl font-bold text-white mb-5">
+                    </p>
+                    <button
+                        id="play-again"
+                        class="px-7 py-2.5 text-base font-bold border-4 border-white text-white rounded-full hover:bg-white hover:text-black transition-all"
+                    >
+                        Play Again
+                    </button>
+                    <button
+                        id="change-side"
+                        class="mt-2 px-7 py-2 text-sm font-semibold text-gray-400 hover:text-white transition-all"
+                    >
+                        Change Side
+                    </button>
+                </div>
             </div>
         </div>
-        <p id="control-hint" class="text-gray-600 text-xs mt-0.5"></p>
+        <p id="control-hint" class="text-gray-600 text-xs mt-1.5"></p>
     </div>
 </section>
 
@@ -91,16 +113,16 @@
         // Estimate space used by: navbar (~180px), section heading+subtitle (~60px), score (~30px), hint (~20px), footer (~40px), padding (~24px)
         const reserved = 354;
         const availableH = Math.max(180, viewportH - reserved);
-        const maxW = Math.min(section.clientWidth - 16, 800);
-        const aspectRatio = 800 / 480;
+        const maxW = Math.min(section.clientWidth - 16, 1000);
+        const aspectRatio = 1000 / 600;
         let canvasW = maxW;
         let canvasH = canvasW / aspectRatio;
         if (canvasH > availableH) {
             canvasH = availableH;
             canvasW = canvasH * aspectRatio;
         }
-        canvas.width = 800;
-        canvas.height = 480;
+        canvas.width = 1000;
+        canvas.height = 600;
         canvas.style.width = canvasW + "px";
         canvas.style.height = canvasH + "px";
     }
@@ -108,8 +130,8 @@
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
-    const WIDTH = 800;
-    const HEIGHT = 480;
+    const WIDTH = 1000;
+    const HEIGHT = 600;
 
     const PADDLE_WIDTH = 14;
     const PADDLE_HEIGHT = 90;
@@ -117,18 +139,28 @@
     const PADDLE_SPEED = 6;
     const BALL_SIZE = 14;
     const BALL_SPEED_INITIAL = 6;
-    const BALL_SPEED_MAX = 14;
+    const BALL_SPEED_MAX = 17;
 
     let playerSide: "left" | "right" = "left";
     let scores = { left: 0, right: 0 };
     let animFrameId: number | null = null;
     let gameRunning = false;
+    let isPaused = false;
+
+    let lastMouseX = WIDTH / 2;
+    let lastMouseY = HEIGHT / 2;
+    
+    let lastHitter: "left" | "right" | null = null;
+    let previousBallX = WIDTH / 2;
+    let hitCooldown = 0;
+    let wallHitBeforePaddle = false;
 
     const leftPaddle = {
         x: PADDLE_MARGIN,
         y: HEIGHT / 2 - PADDLE_HEIGHT / 2,
         width: PADDLE_WIDTH,
         height: PADDLE_HEIGHT,
+        dx: 0,
         dy: 0,
     };
     const rightPaddle = {
@@ -136,6 +168,7 @@
         y: HEIGHT / 2 - PADDLE_HEIGHT / 2,
         width: PADDLE_WIDTH,
         height: PADDLE_HEIGHT,
+        dx: 0,
         dy: 0,
     };
     const ball = {
@@ -146,28 +179,60 @@
     };
 
     function resetBall(direction: 1 | -1 = 1) {
-        ball.x = WIDTH / 2;
-        ball.y = HEIGHT / 2;
+        const paddle = direction === 1 ? leftPaddle : rightPaddle;
+        ball.x = direction === 1 ? paddle.x + paddle.width + 20 : paddle.x - 20;
+        ball.y = paddle.y + paddle.height / 2;
+        
+        let angle = (Math.random() * 20 + 35) * (Math.PI / 180);
         const speed = BALL_SPEED_INITIAL;
-        ball.speedX = speed * direction;
-        ball.speedY = speed * (Math.random() * 1.4 - 0.7);
+        ball.speedX = speed * Math.cos(angle) * direction;
+        ball.speedY = speed * Math.sin(angle) * (Math.random() > 0.5 ? 1 : -1);
+        
+        lastHitter = direction === 1 ? "left" : "right";
+        previousBallX = ball.x;
+        wallHitBeforePaddle = false;
     }
 
     function draw() {
-        ctx.fillStyle = "#0a0a0a";
+        // Padel Court Blue Background
+        ctx.fillStyle = "#1e73be";
         ctx.fillRect(0, 0, WIDTH, HEIGHT);
 
-        ctx.setLineDash([12, 10]);
-        ctx.strokeStyle = "#2a2a2a";
-        ctx.lineWidth = 3;
+        // Court Lines (White)
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 4;
+        
+        // Outer border
+        ctx.strokeRect(2, 2, WIDTH - 4, HEIGHT - 4);
+        
+        // Net (vertical center line)
         ctx.beginPath();
         ctx.moveTo(WIDTH / 2, 0);
         ctx.lineTo(WIDTH / 2, HEIGHT);
         ctx.stroke();
-        ctx.setLineDash([]);
 
-        const leftColor = playerSide === "left" ? "#38a1da" : "#666";
+        // Service lines (25% from back walls)
+        const serveX1 = WIDTH * 0.25;
+        const serveX2 = WIDTH * 0.75;
+        
+        ctx.beginPath();
+        ctx.moveTo(serveX1, 0);
+        ctx.lineTo(serveX1, HEIGHT);
+        ctx.moveTo(serveX2, 0);
+        ctx.lineTo(serveX2, HEIGHT);
+        ctx.stroke();
+
+        // Center service line (horizontal connecting the service lines)
+        ctx.beginPath();
+        ctx.moveTo(serveX1, HEIGHT / 2);
+        ctx.lineTo(serveX2, HEIGHT / 2);
+        ctx.stroke();
+
+        // Draw Left Paddle
+        const leftColor = playerSide === "left" ? "#4fc3f7" : "#333";
         ctx.fillStyle = leftColor;
+        ctx.shadowColor = "rgba(0,0,0,0.5)";
+        ctx.shadowBlur = 8;
         ctx.beginPath();
         ctx.roundRect(
             leftPaddle.x,
@@ -177,9 +242,13 @@
             6,
         );
         ctx.fill();
-
-        const rightColor = playerSide === "right" ? "#e63529" : "#666";
+        ctx.shadowBlur = 0; // reset
+        
+        // Draw Right Paddle
+        const rightColor = playerSide === "right" ? "#ff4c4c" : "#333";
         ctx.fillStyle = rightColor;
+        ctx.shadowColor = "rgba(0,0,0,0.5)";
+        ctx.shadowBlur = 8;
         ctx.beginPath();
         ctx.roundRect(
             rightPaddle.x,
@@ -189,7 +258,9 @@
             6,
         );
         ctx.fill();
+        ctx.shadowBlur = 0; // reset
 
+        // Draw Ball (neon yellow)
         ctx.beginPath();
         ctx.arc(ball.x, ball.y, BALL_SIZE / 2, 0, Math.PI * 2);
         ctx.fillStyle = "#c8e000";
@@ -199,83 +270,208 @@
         ctx.shadowBlur = 0;
     }
 
-    function moveAI(paddle: typeof leftPaddle) {
-        const target = ball.y;
-        const center = paddle.y + paddle.height / 2;
-        const diff = target - center;
-        const aiSpeed = PADDLE_SPEED * 0.82;
-        if (Math.abs(diff) > 4) {
-            paddle.y += diff > 0 ? aiSpeed : -aiSpeed;
+    function moveAI(paddle: typeof leftPaddle, side: "left" | "right") {
+        const targetY = ball.y;
+        let targetX = side === "left" ? WIDTH * 0.15 : WIDTH * 0.85;
+        
+        // Move towards ball on X if it's approaching
+        if ((side === "left" && ball.speedX < 0) || (side === "right" && ball.speedX > 0)) {
+            targetX = side === "left" ? (ball.x < WIDTH/2 ? ball.x - 30 : WIDTH*0.15) : (ball.x > WIDTH/2 ? ball.x + 30 : WIDTH * 0.85);
         }
+        
+        const center = paddle.y + paddle.height / 2;
+        const diffY = targetY - center;
+        const diffX = targetX - (paddle.x + paddle.width / 2);
+        
+        const aiSpeedY = PADDLE_SPEED * 1.15;
+        const aiSpeedX = PADDLE_SPEED * 0.75;
+        
+        paddle.dy = 0;
+        paddle.dx = 0;
+        
+        if (Math.abs(diffY) > aiSpeedY) {
+            paddle.dy = diffY > 0 ? aiSpeedY : -aiSpeedY;
+            paddle.y += paddle.dy;
+        }
+        if (Math.abs(diffX) > aiSpeedX) {
+            paddle.dx = diffX > 0 ? aiSpeedX : -aiSpeedX;
+            paddle.x += paddle.dx;
+        }
+        
+        // 4-way bounds
         paddle.y = Math.max(0, Math.min(HEIGHT - paddle.height, paddle.y));
+        if (side === "left") {
+            paddle.x = Math.max(0, Math.min(WIDTH/2 - paddle.width, paddle.x));
+        } else {
+            paddle.x = Math.max(WIDTH/2, Math.min(WIDTH - paddle.width, paddle.x));
+        }
     }
 
     function update() {
         ball.x += ball.speedX;
         ball.y += ball.speedY;
 
+        let hitWallThisFrame = false;
+
         if (ball.y - BALL_SIZE / 2 <= 0) {
             ball.y = BALL_SIZE / 2;
-            ball.speedY *= -1;
+            ball.speedY = Math.abs(ball.speedY);
+            hitWallThisFrame = true;
         }
         if (ball.y + BALL_SIZE / 2 >= HEIGHT) {
             ball.y = HEIGHT - BALL_SIZE / 2;
-            ball.speedY *= -1;
+            ball.speedY = -Math.abs(ball.speedY);
+            hitWallThisFrame = true;
+        }
+        
+        if (ball.x - BALL_SIZE / 2 <= 0) {
+            ball.x = BALL_SIZE / 2;
+            ball.speedX = Math.abs(ball.speedX);
+            hitWallThisFrame = true;
+        }
+        if (ball.x + BALL_SIZE / 2 >= WIDTH) {
+            ball.x = WIDTH - BALL_SIZE / 2;
+            ball.speedX = -Math.abs(ball.speedX);
+            hitWallThisFrame = true;
+        }
+        
+        if (hitWallThisFrame) {
+            let wallSide: "left" | "right" = ball.x < WIDTH / 2 ? "left" : "right";
+            if (lastHitter !== wallSide) {
+                wallHitBeforePaddle = true;
+            } else {
+                if (wallHitBeforePaddle) {
+                    if (wallSide === "left") {
+                        scores.right++;
+                        updateScoreUI();
+                        if (scores.right >= WINNING_SCORE) return endGame("right");
+                        isPaused = true;
+                        setTimeout(() => { if(gameRunning) { isPaused = false; resetBall(1); } }, 1000);
+                    } else {
+                        scores.left++;
+                        updateScoreUI();
+                        if (scores.left >= WINNING_SCORE) return endGame("left");
+                        isPaused = true;
+                        setTimeout(() => { if(gameRunning) { isPaused = false; resetBall(-1); } }, 1000);
+                    }
+                    return;
+                }
+            }
         }
 
-        if (
-            ball.x - BALL_SIZE / 2 <= leftPaddle.x + leftPaddle.width &&
-            ball.x - BALL_SIZE / 2 >= leftPaddle.x &&
-            ball.y >= leftPaddle.y &&
-            ball.y <= leftPaddle.y + leftPaddle.height
-        ) {
-            ball.x = leftPaddle.x + leftPaddle.width + BALL_SIZE / 2;
-            const hitPos =
-                (ball.y - (leftPaddle.y + leftPaddle.height / 2)) /
-                (leftPaddle.height / 2);
-            const angle = hitPos * (Math.PI / 3.5);
-            const speed = Math.min(
-                Math.abs(ball.speedX) * 1.05,
-                BALL_SPEED_MAX,
-            );
-            ball.speedX = speed;
-            ball.speedY = speed * Math.sin(angle);
+        if (hitCooldown > 0) hitCooldown--;
+
+        // Paddle hitting logic
+        let hitPaddle = false;
+        let paddleHit = null;
+        let dSign = 1;
+
+        // Anti-tunneling bounds (expanded hitboxes during fast swings)
+        let lLeft = leftPaddle.x;
+        if (leftPaddle.dx > 0) lLeft -= leftPaddle.dx * 1.5; 
+        let lTop = leftPaddle.y - 20;
+        let lBottom = leftPaddle.y + leftPaddle.height + 20;
+
+        let rRight = rightPaddle.x + rightPaddle.width;
+        if (rightPaddle.dx < 0) rRight -= rightPaddle.dx * 1.5; 
+        let rTop = rightPaddle.y - 20;
+        let rBottom = rightPaddle.y + rightPaddle.height + 20;
+
+        if (hitCooldown === 0) {
+            if (
+                ball.x - BALL_SIZE / 2 <= leftPaddle.x + leftPaddle.width &&
+                ball.x + BALL_SIZE / 2 >= lLeft &&
+                ball.y >= lTop &&
+                ball.y <= lBottom &&
+                ball.x < WIDTH / 2 // Ensure hit is on own side
+            ) {
+                ball.x = leftPaddle.x + leftPaddle.width + BALL_SIZE / 2;
+                paddleHit = leftPaddle;
+                dSign = 1;
+                hitPaddle = true;
+            } else if (
+                ball.x + BALL_SIZE / 2 >= rightPaddle.x &&
+                ball.x - BALL_SIZE / 2 <= rRight &&
+                ball.y >= rTop &&
+                ball.y <= rBottom &&
+                ball.x > WIDTH / 2
+            ) {
+                ball.x = rightPaddle.x - BALL_SIZE / 2;
+                paddleHit = rightPaddle;
+                dSign = -1;
+                hitPaddle = true;
+            }
         }
 
-        if (
-            ball.x + BALL_SIZE / 2 >= rightPaddle.x &&
-            ball.x + BALL_SIZE / 2 <= rightPaddle.x + rightPaddle.width &&
-            ball.y >= rightPaddle.y &&
-            ball.y <= rightPaddle.y + rightPaddle.height
-        ) {
-            ball.x = rightPaddle.x - BALL_SIZE / 2;
-            const hitPos =
-                (ball.y - (rightPaddle.y + rightPaddle.height / 2)) /
-                (rightPaddle.height / 2);
-            const angle = hitPos * (Math.PI / 3.5);
-            const speed = Math.min(
-                Math.abs(ball.speedX) * 1.05,
-                BALL_SPEED_MAX,
-            );
-            ball.speedX = -speed;
-            ball.speedY = speed * Math.sin(angle);
+        if (hitPaddle && paddleHit) {
+            let currentHitter: "left" | "right" = dSign === 1 ? "left" : "right";
+            
+            // Double-hit fault: a player can only strike the ball once
+            if (lastHitter === currentHitter) {
+                if (currentHitter === "left") {
+                    scores.right++;
+                    updateScoreUI();
+                    if (scores.right >= WINNING_SCORE) return endGame("right");
+                    isPaused = true;
+                    setTimeout(() => { if(gameRunning) { isPaused = false; resetBall(1); } }, 1000);
+                } else {
+                    scores.left++;
+                    updateScoreUI();
+                    if (scores.left >= WINNING_SCORE) return endGame("left");
+                    isPaused = true;
+                    setTimeout(() => { if(gameRunning) { isPaused = false; resetBall(-1); } }, 1000);
+                }
+                return;
+            }
+
+            hitCooldown = 15; // prevent multi-hits for 15 frames
+            lastHitter = currentHitter;
+            
+            const hitPos = (ball.y - (paddleHit.y + paddleHit.height / 2)) / (paddleHit.height / 2);
+            let bounceAngle = hitPos * (Math.PI / 3); // up to 60 deg
+            
+            // Movement bias
+            if (paddleHit.dy > 0) bounceAngle += 0.15;
+            if (paddleHit.dy < 0) bounceAngle -= 0.15;
+            bounceAngle = Math.max(-Math.PI/2.5, Math.min(Math.PI/2.5, bounceAngle));
+
+            let currentSpeed = Math.hypot(ball.speedX, ball.speedY);
+            let speed = Math.min(currentSpeed + 0.8, BALL_SPEED_MAX);
+
+            ball.speedX = speed * Math.cos(bounceAngle) * dSign;
+            ball.speedY = speed * Math.sin(bounceAngle);
         }
 
-        if (ball.x < 0) {
-            scores.right++;
-            updateScoreUI();
-            if (scores.right >= WINNING_SCORE) return endGame("right");
-            resetBall(1);
+        // Point score logic: must hit before it crosses net back to opponent
+        if (previousBallX <= WIDTH / 2 && ball.x > WIDTH / 2) {
+            wallHitBeforePaddle = false;
+            // Crossed to Right half
+            if (lastHitter !== "left") {
+                // Left failed to hit it
+                scores.right++;
+                updateScoreUI();
+                if (scores.right >= WINNING_SCORE) return endGame("right");
+                
+                isPaused = true;
+                setTimeout(() => { if(gameRunning) { isPaused = false; resetBall(1); } }, 1000);
+            }
+        } else if (previousBallX >= WIDTH / 2 && ball.x < WIDTH / 2) {
+            wallHitBeforePaddle = false;
+            // Crossed to Left half
+            if (lastHitter !== "right") {
+                // Right failed to hit it
+                scores.left++;
+                updateScoreUI();
+                if (scores.left >= WINNING_SCORE) return endGame("left");
+                
+                isPaused = true;
+                setTimeout(() => { if(gameRunning) { isPaused = false; resetBall(-1); } }, 1000);
+            }
         }
-        if (ball.x > WIDTH) {
-            scores.left++;
-            updateScoreUI();
-            if (scores.left >= WINNING_SCORE) return endGame("left");
-            resetBall(-1);
-        }
+        previousBallX = ball.x;
 
-        if (playerSide === "left") moveAI(rightPaddle);
-        else moveAI(leftPaddle);
+        if (playerSide === "left") moveAI(rightPaddle, "right");
+        else moveAI(leftPaddle, "left");
     }
 
     function updateScoreUI() {
@@ -330,10 +526,15 @@
         hint.textContent = `Move your mouse over the canvas to control the ${side === "left" ? "left (blue)" : "right (red)"} paddle`;
 
         gameRunning = true;
+        isPaused = false;
+        document.getElementById("pause-btn")!.textContent = "Pause";
+        
         function loop() {
             if (!gameRunning) return;
-            update();
-            draw();
+            if (!isPaused) {
+                update();
+                draw();
+            }
             animFrameId = requestAnimationFrame(loop);
         }
         loop();
@@ -341,13 +542,24 @@
 
     canvas.addEventListener("mousemove", (e) => {
         const rect = canvas.getBoundingClientRect();
+        const scaleX = WIDTH / rect.width;
         const scaleY = HEIGHT / rect.height;
+        const mouseX = (e.clientX - rect.left) * scaleX;
         const mouseY = (e.clientY - rect.top) * scaleY;
         const paddle = playerSide === "left" ? leftPaddle : rightPaddle;
-        paddle.y = Math.max(
-            0,
-            Math.min(HEIGHT - paddle.height, mouseY - paddle.height / 2),
-        );
+        
+        paddle.dx = mouseX - lastMouseX;
+        paddle.dy = mouseY - lastMouseY;
+        lastMouseX = mouseX;
+        lastMouseY = mouseY;
+        
+        paddle.y = Math.max(0, Math.min(HEIGHT - paddle.height, mouseY - paddle.height / 2));
+        
+        if (playerSide === "left") {
+            paddle.x = Math.max(0, Math.min(WIDTH/2 - paddle.width, mouseX - paddle.width / 2));
+        } else {
+            paddle.x = Math.max(WIDTH/2, Math.min(WIDTH - paddle.width, mouseX - paddle.width / 2));
+        }
     });
 
     canvas.addEventListener(
@@ -355,13 +567,24 @@
         (e) => {
             e.preventDefault();
             const rect = canvas.getBoundingClientRect();
+            const scaleX = WIDTH / rect.width;
             const scaleY = HEIGHT / rect.height;
+            const touchX = (e.touches[0].clientX - rect.left) * scaleX;
             const touchY = (e.touches[0].clientY - rect.top) * scaleY;
             const paddle = playerSide === "left" ? leftPaddle : rightPaddle;
-            paddle.y = Math.max(
-                0,
-                Math.min(HEIGHT - paddle.height, touchY - paddle.height / 2),
-            );
+            
+            paddle.dx = touchX - lastMouseX;
+            paddle.dy = touchY - lastMouseY;
+            lastMouseX = touchX;
+            lastMouseY = touchY;
+            
+            paddle.y = Math.max(0, Math.min(HEIGHT - paddle.height, touchY - paddle.height / 2));
+            
+            if (playerSide === "left") {
+                paddle.x = Math.max(0, Math.min(WIDTH/2 - paddle.width, touchX - paddle.width / 2));
+            } else {
+                paddle.x = Math.max(WIDTH/2, Math.min(WIDTH - paddle.width, touchX - paddle.width / 2));
+            }
         },
         { passive: false },
     );
@@ -376,22 +599,47 @@
         .getElementById("play-again")
         ?.addEventListener("click", () => startGame(playerSide));
 
-    document.getElementById("change-side")?.addEventListener("click", () => {
+    function quitGame() {
         gameRunning = false;
+        isPaused = false;
         if (animFrameId !== null) cancelAnimationFrame(animFrameId);
-        (
-            document.getElementById("game-container") as HTMLElement
-        ).classList.add("hidden");
-        (
-            document.getElementById("game-container") as HTMLElement
-        ).classList.remove("flex");
-        const overlay = document.getElementById(
-            "winner-overlay",
-        ) as HTMLElement;
-        overlay.classList.add("hidden");
-        overlay.classList.remove("flex");
-        (
-            document.getElementById("side-selection") as HTMLElement
-        ).classList.remove("hidden");
-    });
+        
+        document.getElementById("game-container")!.classList.add("hidden");
+        document.getElementById("game-container")!.classList.remove("flex");
+        
+        document.getElementById("side-selection")!.classList.remove("hidden");
+        
+        document.getElementById("pause-overlay")!.classList.add("hidden");
+        document.getElementById("pause-overlay")!.classList.remove("flex");
+        
+        document.getElementById("winner-overlay")!.classList.add("hidden");
+        document.getElementById("winner-overlay")!.classList.remove("flex");
+    }
+
+    document.getElementById("change-side")?.addEventListener("click", quitGame);
+    document.getElementById("end-game-btn")?.addEventListener("click", quitGame);
+
+    function togglePause() {
+        if (!gameRunning) return;
+        const winnerOverlay = document.getElementById("winner-overlay");
+        // Don't pause if the game is over
+        if (winnerOverlay && !winnerOverlay.classList.contains("hidden")) return;
+        
+        isPaused = !isPaused;
+        const pauseBtn = document.getElementById("pause-btn")!;
+        const pauseOverlay = document.getElementById("pause-overlay")!;
+        
+        pauseBtn.textContent = isPaused ? "Resume" : "Pause";
+        
+        if (isPaused) {
+            pauseOverlay.classList.remove("hidden");
+            pauseOverlay.classList.add("flex");
+        } else {
+            pauseOverlay.classList.add("hidden");
+            pauseOverlay.classList.remove("flex");
+        }
+    }
+
+    document.getElementById("pause-btn")?.addEventListener("click", togglePause);
+    document.getElementById("resume-btn-large")?.addEventListener("click", togglePause);
 </script>

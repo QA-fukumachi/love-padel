@@ -27,7 +27,7 @@ if (isBlogDetail && translatedSlug) {
 // Positive values (mt-1, mt-2) move text DOWN; negative (-mt-1) move UP
 const bookButtonOffset: Record<string, string> = {
   en: "-mt-1", // ← English offset: adjust to move EN text up/down
-  ka: "-mt-1", // ← Georgian offset: adjust to move KA text up/down
+  ka: "-mt-0", // ← Georgian offset: adjust to move KA text up/down
 };
 ---
 
@@ -68,22 +68,22 @@ const bookButtonOffset: Record<string, string> = {
           >
             <a
               href={`/${locale}#who-we-are`}
-              class="block text-base font-medium text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+              class={`block font-medium text-[var(--color-brand-blue)] opacity-70 hover:opacity-100 hover:text-white transition-all whitespace-nowrap ${locale === "ka" ? "text-lg" : "text-base"}`}
               >{t["nav.about.whoWeAre"]}</a
             >
             <a
               href={`/${locale}#about-padel`}
-              class="block text-base font-medium text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+              class={`block font-medium text-[var(--color-brand-blue)] opacity-70 hover:opacity-100 hover:text-white transition-all whitespace-nowrap ${locale === "ka" ? "text-lg" : "text-base"}`}
               >{t["nav.about.aboutPadel"]}</a
             >
             <a
               href={`/${locale}#contact-us`}
-              class="block text-base font-medium text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+              class={`block font-medium text-[var(--color-brand-blue)] opacity-70 hover:opacity-100 hover:text-white transition-all whitespace-nowrap ${locale === "ka" ? "text-lg" : "text-base"}`}
               >{t["nav.about.contactUs"]}</a
             >
             <a
               href={`/${locale}/faq`}
-              class="block text-base font-medium text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+              class={`block font-medium text-[var(--color-brand-blue)] opacity-70 hover:opacity-100 hover:text-white transition-all whitespace-nowrap ${locale === "ka" ? "text-lg" : "text-base"}`}
               >{t["nav.about.faq"]}</a
             >
           </div>
@@ -109,12 +109,12 @@ const bookButtonOffset: Record<string, string> = {
           >
             <a
               href={`/${locale}#open-play`}
-              class="block text-base font-medium text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+              class={`block font-medium text-[var(--color-brand-blue)] opacity-70 hover:opacity-100 hover:text-white transition-all whitespace-nowrap ${locale === "ka" ? "text-lg" : "text-base"}`}
               >{t["nav.events.openPlay"]}</a
             >
             <a
               href={`/${locale}/blog`}
-              class="block text-base font-medium text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+              class={`block font-medium text-[var(--color-brand-blue)] opacity-70 hover:opacity-100 hover:text-white transition-all whitespace-nowrap ${locale === "ka" ? "text-lg" : "text-base"}`}
               >{t["nav.events.blog"]}</a
             >
           </div>
@@ -132,15 +132,15 @@ const bookButtonOffset: Record<string, string> = {
       >
         <a
           href={`/${locale}/contact`}
-          class={`border-4 border-[var(--color-brand-blue)] text-[var(--color-brand-red)] text-2xl xl:text-3xl px-8 xl:px-10 py-2 xl:py-2.5 rounded-[3rem] hover:bg-[var(--color-brand-blue)] hover:text-white transition-all inline-flex items-center justify-center ${
-            locale === "ka" ? "font-medium" : "font-semibold"
+          class={`border-4 border-[var(--color-brand-blue)] text-[var(--color-brand-red)] rounded-[3rem] hover:bg-[var(--color-brand-blue)] hover:text-white transition-all inline-flex items-center justify-center ${
+            locale === "ka" ? "text-2xl xl:text-3xl px-8 xl:px-10 py-2 xl:py-2.5 font-medium" : "text-2xl xl:text-3xl px-8 xl:px-10 py-2 xl:py-2.5 font-semibold"
           }`}
         >
           <span class={bookButtonOffset[locale]}>{t["nav.book"]}</span>
         </a>
 
         <div
-          class="flex flex-col text-sm font-bold text-[var(--color-brand-red)]"
+          class="flex flex-col text-sm font-bold text-[var(--color-brand-red)] lang-switcher"
         >
           <a
             href={locale === "en" ? "#" : switcherUrl}
@@ -162,7 +162,7 @@ const bookButtonOffset: Record<string, string> = {
         class="flex lg:hidden items-center text-[var(--color-brand-red)] space-x-4"
       >
         <div
-          class="flex flex-col text-xs font-bold text-[var(--color-brand-red)] border-r border-[#333] pr-4"
+          class="flex flex-col text-xs font-bold text-[var(--color-brand-red)] border-r border-[#333] pr-4 lang-switcher"
         >
           <a
             href={locale === "en" ? "#" : switcherUrl}
@@ -219,22 +219,22 @@ const bookButtonOffset: Record<string, string> = {
         >
           <a
             href={`/${locale}#who-we-are`}
-            class="text-lg text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+            class="text-lg text-[var(--color-brand-blue)] opacity-70 hover:opacity-100 hover:text-white transition-all whitespace-nowrap"
             >{t["nav.about.whoWeAre"]}</a
           >
           <a
             href={`/${locale}#about-padel`}
-            class="text-lg text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+            class="text-lg text-[var(--color-brand-blue)] opacity-70 hover:opacity-100 hover:text-white transition-all whitespace-nowrap"
             >{t["nav.about.aboutPadel"]}</a
           >
           <a
             href={`/${locale}#contact-us`}
-            class="text-lg text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+            class="text-lg text-[var(--color-brand-blue)] opacity-70 hover:opacity-100 hover:text-white transition-all whitespace-nowrap"
             >{t["nav.about.contactUs"]}</a
           >
           <a
             href={`/${locale}/faq`}
-            class="text-lg text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+            class="text-lg text-[var(--color-brand-blue)] opacity-70 hover:opacity-100 hover:text-white transition-all whitespace-nowrap"
             >{t["nav.about.faq"]}</a
           >
         </div>
@@ -260,12 +260,12 @@ const bookButtonOffset: Record<string, string> = {
         >
           <a
             href={`/${locale}#open-play`}
-            class="text-lg text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+            class="text-lg text-[var(--color-brand-blue)] opacity-70 hover:opacity-100 hover:text-white transition-all whitespace-nowrap"
             >{t["nav.events.openPlay"]}</a
           >
           <a
             href={`/${locale}/blog`}
-            class="text-lg text-[var(--color-brand-blue)] hover:text-white transition-colors whitespace-nowrap"
+            class="text-lg text-[var(--color-brand-blue)] opacity-70 hover:opacity-100 hover:text-white transition-all whitespace-nowrap"
             >{t["nav.events.blog"]}</a
           >
         </div>
@@ -277,7 +277,9 @@ const bookButtonOffset: Record<string, string> = {
       >
       <a
         href={`/${locale}/contact`}
-        class="w-fit mx-auto mt-8 border-[3px] border-[var(--color-brand-blue)] text-[var(--color-brand-red)] px-10 rounded-[3rem] font-semibold text-3xl inline-flex items-center justify-center py-3 hover:bg-[var(--color-brand-blue)] hover:text-white transition-colors"
+        class={`w-fit mx-auto mt-8 border-[3px] border-[var(--color-brand-blue)] text-[var(--color-brand-red)] rounded-[3rem] font-semibold inline-flex items-center justify-center hover:bg-[var(--color-brand-blue)] hover:text-white transition-colors ${
+          locale === "ka" ? "text-4xl px-12 py-4" : "text-3xl px-10 py-3"
+        }`}
       >
         <span class={bookButtonOffset[locale]}>{t["nav.book"]}</span>
       </a>

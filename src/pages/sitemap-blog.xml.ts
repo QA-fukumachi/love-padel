@@ -9,14 +9,14 @@ export const GET = async () => {
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   ${posts
-      .map(
-          (post: any) => `
+            .map(
+                (post: any) => `
   <url>
     <loc>https://lovepadel.ge/${post.language}/blog/${post.slug}</loc>
     <lastmod>${new Date(post._updatedAt).toISOString()}</lastmod>
   </url>`
-      )
-      .join("")}
+            )
+            .join("")}
 </urlset>`;
 
     // Return the generated XML
