@@ -14,7 +14,12 @@ if (!locale || !isValidLocale(locale)) {
 const t = getTranslations(locale);
 
 // Fetch posts
-const posts = await sanityClient.fetch(getBlogPostsQuery, { locale });
+let posts: any[] = [];
+try {
+  posts = await sanityClient.fetch(getBlogPostsQuery, { locale });
+} catch (error: any) {
+  console.error("Sanity fetch error:", error.message || error);
+}
 ---
 
 <BaseLayout

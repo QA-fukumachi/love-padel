@@ -50,7 +50,7 @@ const bookButtonOffset: Record<string, string> = {
 
       <!-- Desktop Nav -->
       <nav
-        class={`hidden lg:flex space-x-6 xl:space-x-8 items-center font-bold -mt-8 lg:-mt-8 ${locale === "ka" ? "text-lg xl:text-xl" : "text-lg xl:text-xl"}`}
+        class={`hidden lg:flex space-x-6 xl:space-x-8 items-center font-bold -mt-8 lg:-mt-8 ${locale === "ka" ? "font-nino uppercase text-lg xl:text-xl" : "text-lg xl:text-xl"}`}
       >
         <!-- About Dropdown -->
         <div class="relative" id="about-dropdown-desktop">
@@ -133,7 +133,7 @@ const bookButtonOffset: Record<string, string> = {
         <a
           href={`/${locale}/contact`}
           class={`border-4 border-[var(--color-brand-blue)] text-[var(--color-brand-red)] rounded-[3rem] hover:bg-[var(--color-brand-blue)] hover:text-white transition-all inline-flex items-center justify-center ${
-            locale === "ka" ? "text-2xl xl:text-3xl px-8 xl:px-10 py-2 xl:py-2.5 font-medium" : "text-2xl xl:text-3xl px-8 xl:px-10 py-2 xl:py-2.5 font-semibold"
+            locale === "ka" ? "font-nino uppercase text-2xl xl:text-3xl px-8 xl:px-10 py-2 xl:py-2.5 font-medium" : "text-2xl xl:text-3xl px-8 xl:px-10 py-2 xl:py-2.5 font-semibold"
           }`}
         >
           <span class={bookButtonOffset[locale]}>{t["nav.book"]}</span>
@@ -199,7 +199,7 @@ const bookButtonOffset: Record<string, string> = {
 
   <!-- Mobile menu -->
   <div
-    class="lg:hidden hidden bg-black border-t border-gray-800 mt-4 max-h-[70vh] overflow-y-auto"
+    class={`lg:hidden hidden bg-black border-t border-gray-800 mt-4 max-h-[70vh] overflow-y-auto ${locale === "ka" ? "font-nino uppercase" : ""}`}
     id="mobile-menu"
   >
     <div class="px-6 pt-4 pb-6 flex flex-col items-start space-y-4">

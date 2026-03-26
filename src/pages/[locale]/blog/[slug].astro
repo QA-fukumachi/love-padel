@@ -14,10 +14,15 @@ if (!locale || !isValidLocale(locale) || !slug) {
 const t = getTranslations(locale);
 
 // Fetch the single post
-const post = await sanityClient.fetch(getSingleBlogPostQuery, {
-  locale,
-  slug,
-});
+let post: any = null;
+try {
+  post = await sanityClient.fetch(getSingleBlogPostQuery, {
+    locale,
+    slug,
+  });
+} catch (error: any) {
+  console.error("Sanity fetch error:", error.message || error);
+}
 
 if (!post) {
   return new Response(null, { status: 404, statusText: "Not found" });
