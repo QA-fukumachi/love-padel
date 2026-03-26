@@ -222,8 +222,8 @@ main::-webkit-scrollbar {
 /* ── Scroll down indicator ── */
 #scroll-indicator {
   position: absolute;
-  bottom: 16rem;
-  /* Just high enough to clear the footer on vertical mobile */
+  bottom: 9rem;
+  /* Placed near the bottom on vertical mobile to avoid overlapping hero assets */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -232,6 +232,13 @@ main::-webkit-scrollbar {
   gap: 0.4rem;
   z-index: 10;
   animation: si-fade-in 1.2s 0.8s both;
+}
+
+/* Hide scroll indicator on very small screens (like iPhone SE) to save space */
+@media (max-width: 400px) {
+  #scroll-indicator {
+    display: none !important;
+  }
 }
 
 /* Move indicator up significantly on mobile landscape so it's not hidden */
