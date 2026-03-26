@@ -135,11 +135,7 @@ html[lang="ka"] h6 {
 }
 
 
-html[lang="ka"] .lang-switcher,
-html[lang="ka"] .lang-switcher * {
-  font-family: sans-serif !important;
-  text-transform: none !important;
-}
+/* Removed forced sans-serif override for switcher */
 
 @layer components {
 

@@ -26,8 +26,8 @@ if (isBlogDetail && translatedSlug) {
 // ── Book Now button: vertical text offset per locale ──────────────────
 // Positive values (mt-1, mt-2) move text DOWN; negative (-mt-1) move UP
 const bookButtonOffset: Record<string, string> = {
-  en: "-mt-1", // ← English offset: adjust to move EN text up/down
-  ka: "-mt-0", // ← Georgian offset: adjust to move KA text up/down
+  en: "relative -top-[1px]", // ← English offset: adjust to move EN text up/down
+  ka: "relative top-[4px]", // ← Georgian offset: adjust to move KA text up/down
 };
 ---
 
@@ -133,7 +133,9 @@ const bookButtonOffset: Record<string, string> = {
         <a
           href={`/${locale}/contact`}
           class={`border-4 border-[var(--color-brand-blue)] text-[var(--color-brand-red)] rounded-[3rem] hover:bg-[var(--color-brand-blue)] hover:text-white transition-all inline-flex items-center justify-center ${
-            locale === "ka" ? "font-nino uppercase text-2xl xl:text-3xl px-8 xl:px-10 py-2 xl:py-2.5 font-medium" : "text-2xl xl:text-3xl px-8 xl:px-10 py-2 xl:py-2.5 font-semibold"
+            locale === "ka"
+              ? "font-nino uppercase text-2xl xl:text-3xl px-8 xl:px-10 py-2 xl:py-2.5 font-medium"
+              : "text-2xl xl:text-3xl px-8 xl:px-10 py-2 xl:py-2.5 font-semibold"
           }`}
         >
           <span class={bookButtonOffset[locale]}>{t["nav.book"]}</span>
@@ -150,7 +152,7 @@ const bookButtonOffset: Record<string, string> = {
           </a>
           <a
             href={locale === "ka" ? "#" : switcherUrl}
-            class={`hover:text-white transition-colors ${locale === "ka" ? "opacity-100 cursor-default" : "opacity-50"}`}
+            class={`hover:text-white transition-colors font-nino uppercase text-base ${locale === "ka" ? "opacity-100 cursor-default" : "opacity-50"}`}
           >
             ქარ
           </a>
@@ -170,8 +172,10 @@ const bookButtonOffset: Record<string, string> = {
           >
           <a
             href={locale === "ka" ? "#" : switcherUrl}
-            class={`${locale === "ka" ? "opacity-100" : "opacity-50"}`}>ქარ</a
+            class={`font-nino uppercase text-sm ${locale === "ka" ? "opacity-100" : "opacity-50"}`}
           >
+            ქარ
+          </a>
         </div>
         <button
           type="button"
