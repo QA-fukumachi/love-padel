@@ -18,17 +18,52 @@ const t = getTranslations(locale);
   locale={locale}
   image="/images/hero-bg.png"
 >
-  <div class="relative w-full min-h-screen flex-grow overflow-hidden flex flex-col justify-center items-center pt-16 pb-8 md:pt-12 md:pb-48">
+  <div
+    class="relative w-full min-h-screen flex-grow overflow-hidden flex flex-col justify-start items-center pt-16 pb-8 md:pt-12 md:pb-48"
+  >
     <!-- Hero Background Image -->
     <div
       class="absolute inset-0 z-0 bg-[url('/images/hero-bg.png')] bg-cover bg-center"
     >
       <div class="absolute inset-0 bg-black bg-opacity-60"></div>
     </div>
-    
-    <!-- Padel Pong Game overlaid -->
-    <div class="relative z-10 w-full mt-4 flex items-center justify-center">
-      {/* <PadelPong /> */}
+
+    <!-- Hero Assets: Left & Right -->
+    <div
+      class="relative z-10 w-full max-w-[1600px] mx-auto px-4 md:px-6 lg:px-12 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 lg:gap-8"
+    >
+      <!-- Left Asset -->
+      <div
+        class="relative w-full md:w-1/2 rounded-2xl overflow-hidden shadow-2xl"
+      >
+        <img
+          src="/images/webasset-left.jpg"
+          alt="Padel player on red court"
+          class="w-full h-auto object-cover"
+          loading="eager"
+        />
+        <img
+          src="/images/this-title-for-left-asset.png"
+          alt=""
+          class="absolute inset-0 w-full h-full object-contain pointer-events-none"
+        />
+      </div>
+      <!-- Right Asset -->
+      <div
+        class="relative w-full md:w-1/2 rounded-2xl overflow-hidden shadow-2xl"
+      >
+        <img
+          src="/images/web-asset-right-1.jpg"
+          alt="Padel player on blue court"
+          class="w-full h-auto object-cover"
+          loading="eager"
+        />
+        <img
+          src="/images/this-title-for-right-asset.png"
+          alt=""
+          class="absolute inset-0 w-full h-full object-contain pointer-events-none"
+        />
+      </div>
     </div>
   </div>
 
@@ -42,7 +77,9 @@ const t = getTranslations(locale);
           >{t["home.whoWeAre.part2"]}</span
         >
       </h2>
-      <p class="text-gray-400 text-lg md:text-xl leading-relaxed max-w-3xl whitespace-pre-line">
+      <p
+        class="text-gray-400 text-lg md:text-xl leading-relaxed max-w-3xl whitespace-pre-line"
+      >
         {t["home.whoWeAre.description"]}
       </p>
     </div>
@@ -75,26 +112,48 @@ const t = getTranslations(locale);
 
         <!-- Text Content -->
         <div class="w-full space-y-8">
-            <h3 class="text-3xl font-bold text-[var(--color-brand-red)] tracking-tight uppercase">
-              {t["home.aboutPadel.whatIs"]}
-            </h3>
-            <p class="text-gray-400 text-lg md:text-xl leading-relaxed whitespace-pre-line">
-              {t["home.aboutPadel.description"]}
-            </p>
-            <div class="space-y-6 mt-8">
-              <div>
-                <h4 class="text-xl font-bold text-[var(--color-brand-blue)] mb-2 uppercase">{t["home.aboutPadel.feature1.title"]}</h4>
-                <p class="text-gray-400 text-lg md:text-xl">{t["home.aboutPadel.feature1.desc"]}</p>
-              </div>
-              <div>
-                <h4 class="text-xl font-bold text-[var(--color-brand-blue)] mb-2 uppercase">{t["home.aboutPadel.feature2.title"]}</h4>
-                <p class="text-gray-400 text-lg md:text-xl">{t["home.aboutPadel.feature2.desc"]}</p>
-              </div>
-              <div>
-                <h4 class="text-xl font-bold text-[var(--color-brand-blue)] mb-2 uppercase">{t["home.aboutPadel.feature3.title"]}</h4>
-                <p class="text-gray-400 text-lg md:text-xl">{t["home.aboutPadel.feature3.desc"]}</p>
-              </div>
+          <h3
+            class="text-3xl font-bold text-[var(--color-brand-red)] tracking-tight uppercase"
+          >
+            {t["home.aboutPadel.whatIs"]}
+          </h3>
+          <p
+            class="text-gray-400 text-lg md:text-xl leading-relaxed whitespace-pre-line"
+          >
+            {t["home.aboutPadel.description"]}
+          </p>
+          <div class="space-y-6 mt-8">
+            <div>
+              <h4
+                class="text-xl font-bold text-[var(--color-brand-blue)] mb-2 uppercase"
+              >
+                {t["home.aboutPadel.feature1.title"]}
+              </h4>
+              <p class="text-gray-400 text-lg md:text-xl">
+                {t["home.aboutPadel.feature1.desc"]}
+              </p>
             </div>
+            <div>
+              <h4
+                class="text-xl font-bold text-[var(--color-brand-blue)] mb-2 uppercase"
+              >
+                {t["home.aboutPadel.feature2.title"]}
+              </h4>
+              <p class="text-gray-400 text-lg md:text-xl">
+                {t["home.aboutPadel.feature2.desc"]}
+              </p>
+            </div>
+            <div>
+              <h4
+                class="text-xl font-bold text-[var(--color-brand-blue)] mb-2 uppercase"
+              >
+                {t["home.aboutPadel.feature3.title"]}
+              </h4>
+              <p class="text-gray-400 text-lg md:text-xl">
+                {t["home.aboutPadel.feature3.desc"]}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
