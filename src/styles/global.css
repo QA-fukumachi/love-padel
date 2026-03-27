@@ -235,7 +235,7 @@ main::-webkit-scrollbar {
 }
 
 /* Hide scroll indicator on very small screens (like iPhone SE) to save space */
-@media (max-width: 400px) {
+@media (max-width: 380px) {
   #scroll-indicator {
     display: none !important;
   }

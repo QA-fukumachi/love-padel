@@ -14,6 +14,8 @@ interface Props {
   hideFooterAtTop?: boolean;
   image?: string;
   article?: boolean;
+  staticFooter?: boolean;
+  relativeFooter?: boolean;
 }
 
 const {
@@ -27,6 +29,8 @@ const {
   hideFooterAtTop = false,
   image,
   article = false,
+  staticFooter = false,
+  relativeFooter = false,
 } = Astro.props;
 ---
 
@@ -83,6 +87,8 @@ const {
   <body
     class="flex flex-col h-[100dvh] overflow-hidden font-sans text-white bg-black"
     data-hide-footer-at-top={hideFooterAtTop ? "true" : "false"}
+    data-static-footer={staticFooter ? "true" : "false"}
+    data-relative-footer={relativeFooter ? "true" : "false"}
   >
     <!-- Scroll progress bar -->
     <div id="scroll-progress" aria-hidden="true"></div>
@@ -118,17 +124,26 @@ const {
           </div>
         )
       }
-      <!-- Add empty space at the absolute bottom of the scroll container so content isn't covered by the footer when stopped -->
-      <div id="footer-spacer" class="w-full shrink-0"></div>
+      <!-- Add empty space at the absolute bottom of the scroll container so content isn't covered by the floating footer when stopped -->
+      {!relativeFooter && <div id="footer-spacer" class="w-full shrink-0"></div>}
+      
+      <!-- If relativeFooter is true, render the footer inside the regular document flow -->
+      {relativeFooter && (
+        <div class="w-full shrink-0 mt-auto">
+          <Footer locale={locale} staticFooter={staticFooter} />
+        </div>
+      )}
     </main>
 
-    <!-- Footer container overlay to prevent reserving empty flex space -->
-    <div
-      id="footer-container"
-      class={`fixed bottom-0 left-0 w-full z-40 transition-all duration-300 ease-out ${hideFooterAtTop ? "opacity-0 pointer-events-none translate-y-full" : "opacity-100 transform translate-y-0"}`}
-    >
-      <Footer locale={locale} />
-    </div>
+    <!-- If relativeFooter is false, render the floating/sliding footer overlay -->
+    {!relativeFooter && (
+      <div
+        id="footer-container"
+        class={`fixed bottom-0 left-0 w-full z-40 transition-all duration-300 ease-out ${staticFooter ? "opacity-100 translate-y-0" : hideFooterAtTop ? "opacity-0 pointer-events-none translate-y-full" : "opacity-100 transform translate-y-0"}`}
+      >
+        <Footer locale={locale} staticFooter={staticFooter} />
+      </div>
+    )}
 
     <script>
       // ── Padel Ball Cursor ──
@@ -177,7 +192,57 @@ const {
       const scrollIndicator = document.getElementById("scroll-indicator");
       let indicatorHidden = false;
 
+      const isRelativeFooter = document.body.dataset.relativeFooter === "true";
+
       if (mainEl && progressBar) {
+        const footerContainer = document.getElementById("footer-container");
+        const footerSpacer = document.getElementById("footer-spacer");
+
+        function updateFooter() {
+          if (!footerContainer || !footerSpacer || !mainEl) return;
+
+          const { scrollTop, scrollHeight, clientHeight } = mainEl;
+          // Calculate height to slide exactly out of view
+          const footerHeight = footerContainer.offsetHeight;
+          footerSpacer.style.height = `${footerHeight}px`;
+
+          // Apply fast and smooth transition rules
+          footerContainer.style.transition =
+            "opacity 0.25s ease-out, transform 0.25s ease-out";
+
+          // Make it disappear almost immediately (after 5px of scrolling)
+          const isAtTop = scrollTop <= 5;
+
+          // Check if we are at the very bottom
+          const isAtBottom =
+            Math.ceil(scrollTop + clientHeight) >= scrollHeight - 2;
+
+          const hideFooterAtTop =
+            document.body.dataset.hideFooterAtTop === "true";
+          const isStaticFooter =
+            document.body.dataset.staticFooter === "true";
+
+          if (isStaticFooter) {
+            footerContainer.style.opacity = "1";
+            footerContainer.style.pointerEvents = "auto";
+            footerContainer.style.transform = "translateY(0)";
+          } else if (isAtBottom || (!hideFooterAtTop && isAtTop)) {
+            // Show Footer Box entirely
+            footerContainer.style.opacity = "1";
+            footerContainer.style.pointerEvents = "auto";
+            footerContainer.style.transform = "translateY(0)";
+          } else {
+            // Hide Footer Box completely off screen
+            footerContainer.style.opacity = "0";
+            footerContainer.style.pointerEvents = "none";
+            // Slide the entire black box totally out of view downwards
+            footerContainer.style.transform = `translateY(${footerHeight}px)`;
+          }
+        }
+
+        // Initialize state on load
+        updateFooter();
+
         mainEl.addEventListener(
           "scroll",
           () => {
@@ -198,42 +263,8 @@ const {
                 "translateX(-50%) translateY(12px)";
             }
 
-            // ── Footer Scroll Logic ──
-            const footerContainer = document.getElementById("footer-container");
-            const footerSpacer = document.getElementById("footer-spacer");
-
-            if (footerContainer && footerSpacer) {
-              // Calculate height to slide exactly out of view
-              const footerHeight = footerContainer.offsetHeight;
-              footerSpacer.style.height = `${footerHeight}px`;
-
-              // Apply fast and smooth transition rules
-              footerContainer.style.transition =
-                "opacity 0.25s ease-out, transform 0.25s ease-out";
-
-              // Make it disappear almost immediately (after 5px of scrolling)
-              const isAtTop = scrollTop <= 5;
-
-              // Check if we are at the very bottom
-              // The "- 2" gives a tiny breathing room for browser rounding pixels on different zooms
-              const isAtBottom =
-                Math.ceil(scrollTop + clientHeight) >= scrollHeight - 2;
-
-              const hideFooterAtTop =
-                document.body.dataset.hideFooterAtTop === "true";
-
-              if (isAtBottom || (!hideFooterAtTop && isAtTop)) {
-                // Show Footer Box entirely
-                footerContainer.style.opacity = "1";
-                footerContainer.style.pointerEvents = "auto";
-                footerContainer.style.transform = "translateY(0)";
-              } else {
-                // Hide Footer Box completely off screen
-                footerContainer.style.opacity = "0";
-                footerContainer.style.pointerEvents = "none";
-                // Slide the entire black box totally out of view downwards
-                footerContainer.style.transform = `translateY(${footerHeight}px)`;
-              }
+            if (!isRelativeFooter) {
+              updateFooter();
             }
           },
           { passive: true },

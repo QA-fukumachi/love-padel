@@ -1,0 +1,206 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getTranslations, isValidLocale } from "../../utils/i18n";
+
+const { locale } = Astro.params;
+
+if (!locale || !isValidLocale(locale)) {
+  return new Response(null, { status: 404, statusText: "Not found" });
+}
+
+const t = getTranslations(locale);
+
+const coachingTypes = [
+  { title: t["coaching.private.title"], desc: t["coaching.private.desc"] },
+  { title: t["coaching.group.title"], desc: t["coaching.group.desc"] },
+  { title: t["coaching.beginner.title"], desc: t["coaching.beginner.desc"] },
+  { title: t["coaching.junior.title"], desc: t["coaching.junior.desc"] },
+];
+
+const features = [
+  t["ballmachine.features.1"],
+  t["ballmachine.features.2"],
+  t["ballmachine.features.3"],
+  t["ballmachine.features.4"],
+];
+
+const whys = [
+  t["ballmachine.why.1"],
+  t["ballmachine.why.2"],
+  t["ballmachine.why.3"],
+  t["ballmachine.why.4"],
+];
+---
+
+<BaseLayout
+  title={`${t["coaching.title"]} | Love Padel`}
+  description={t["coaching.intro"]}
+  locale={locale}
+  hideScrollIndicator={true}
+  image="https://res.cloudinary.com/dkbcjhfiy/image/upload/v1774536266/coach_mledvk.jpg"
+  relativeFooter={true}
+>
+  <section class="w-full bg-black pt-20 md:pt-24 pb-16">
+    <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+      <!-- Two-column grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+        <!-- ═══════════ LEFT COLUMN: Coaching ═══════════ -->
+        <div class="flex flex-col">
+          <!-- Coach Image -->
+          <div class="w-full mb-6">
+            <img
+              src="https://res.cloudinary.com/dkbcjhfiy/image/upload/v1774602021/Firefly_2_rrdlsg.png"
+              alt="Padel coaching session"
+              class="w-full aspect-video object-cover block"
+              loading="eager"
+            />
+          </div>
+
+          <!-- Coaching Title -->
+          <h1
+            class="text-4xl md:text-5xl font-bold text-[var(--color-brand-red)] mb-8 tracking-tight uppercase"
+          >
+            {t["coaching.title"]}
+          </h1>
+
+          <!-- Coaching Intro -->
+          <p
+            class="text-gray-400 text-lg md:text-xl leading-relaxed whitespace-pre-line mb-10"
+          >
+            {t["coaching.intro"]}
+          </p>
+
+          <!-- Coaching Types -->
+          <div class="space-y-8 mb-10">
+            {
+              coachingTypes.map((ct) => (
+                <div>
+                  <h3 class="text-xl font-bold text-[var(--color-brand-blue)] mb-2 uppercase">
+                    {ct.title}
+                  </h3>
+                  <p class="text-gray-400 text-lg md:text-xl">{ct.desc}</p>
+                </div>
+              ))
+            }
+          </div>
+
+          <!-- Coaching Outro -->
+          <p
+            class="text-gray-400 text-lg md:text-xl leading-relaxed whitespace-pre-line mb-12"
+          >
+            {t["coaching.outro"]}
+          </p>
+
+          <!-- Coaches Section -->
+          <div class="border-t border-gray-800 pt-10">
+            <h2
+              class="text-3xl md:text-4xl font-bold text-[var(--color-brand-red)] mb-8 tracking-tight uppercase"
+            >
+              {t["coaching.coaches.title"]}
+            </h2>
+
+            <!-- Coach: Parker Rhodes -->
+            <div>
+              <h3
+                class="text-2xl md:text-3xl font-bold text-[var(--color-brand-blue)] mb-4 tracking-wider"
+              >
+                {t["coaching.coach.parker.name"]}
+              </h3>
+              <h4 class="text-xl font-bold text-gray-400 mb-4 uppercase">
+                {t["coaching.coach.parker.subtitle"]}
+              </h4>
+              <p
+                class="text-gray-400 text-lg md:text-xl leading-relaxed whitespace-pre-line"
+              >
+                {t["coaching.coach.parker.bio"]}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════ RIGHT COLUMN: Ball Machine ═══════════ -->
+        <div class="flex flex-col">
+          <!-- Ball Machine Image -->
+          <div class="w-full mb-6">
+            <img
+              src="https://res.cloudinary.com/dkbcjhfiy/image/upload/v1774602018/Firefly_3_f9rnih.png"
+              alt="Padelmaster ball machine"
+              class="w-full aspect-video object-cover block"
+              loading="eager"
+            />
+          </div>
+
+          <!-- Ball Machine Title -->
+          <h1
+            class="text-4xl md:text-5xl font-bold text-[var(--color-brand-red)] mb-4 tracking-tight uppercase"
+          >
+            {t["ballmachine.title"]}
+          </h1>
+
+          <!-- Ball Machine Subtitle -->
+          <h2
+            class="text-2xl md:text-3xl font-bold text-[var(--color-brand-blue)] mb-8 tracking-tight"
+          >
+            {t["ballmachine.subtitle"]}
+          </h2>
+
+          <!-- Ball Machine Intro -->
+          <p
+            class="text-gray-400 text-lg md:text-xl leading-relaxed whitespace-pre-line mb-10"
+          >
+            {t["ballmachine.intro"]}
+          </p>
+
+          <!-- Key Features -->
+          <div class="mb-10">
+            <h3
+              class="text-xl font-bold text-[var(--color-brand-blue)] mb-4 uppercase"
+            >
+              {t["ballmachine.features.title"]}
+            </h3>
+            <ul class="space-y-3">
+              {
+                features.map((f) => (
+                  <li class="text-gray-400 text-lg md:text-xl flex items-start gap-3">
+                    <span class="text-[var(--color-brand-red)] mt-1.5 flex-shrink-0">
+                      ●
+                    </span>
+                    <span>{f}</span>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+
+          <!-- Why Train -->
+          <div class="mb-10">
+            <h3
+              class="text-xl font-bold text-[var(--color-brand-blue)] mb-4 uppercase"
+            >
+              {t["ballmachine.why.title"]}
+            </h3>
+            <ul class="space-y-3">
+              {
+                whys.map((w) => (
+                  <li class="text-gray-400 text-lg md:text-xl flex items-start gap-3">
+                    <span class="text-[var(--color-brand-red)] mt-1.5 flex-shrink-0">
+                      ●
+                    </span>
+                    <span>{w}</span>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+
+          <!-- Ball Machine Outro -->
+          <p
+            class="text-gray-400 text-lg md:text-xl leading-relaxed whitespace-pre-line"
+          >
+            {t["ballmachine.outro"]}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -30,38 +30,42 @@ const t = getTranslations(locale);
 
     <!-- Hero Assets: Left & Right -->
     <div
-      class="relative z-10 w-full max-w-[1600px] mx-auto px-4 md:px-6 lg:px-12 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 lg:gap-8"
+      class="relative z-10 w-full max-w-[1600px] mx-auto px-4 md:px-6 lg:px-12 flex flex-col md:flex-row items-stretch justify-center gap-4 md:gap-6 lg:gap-8"
     >
       <!-- Left Asset -->
-      <div
-        class="relative w-full md:w-1/2 overflow-hidden shadow-2xl"
-      >
+      <div class="relative w-full md:w-1/2 overflow-hidden shadow-2xl">
+        <!-- Spacer to match right aspect ratio exactly -->
+        <img
+          src="https://res.cloudinary.com/dkbcjhfiy/image/upload/v1774519542/web-asset-right-1_igiz5b.jpg"
+          alt=""
+          class="w-full h-auto invisible pointer-events-none"
+          aria-hidden="true"
+        />
+        <!-- Real Image (fills the spacer's box) -->
         <img
           src="https://res.cloudinary.com/dkbcjhfiy/image/upload/v1774519542/webasset-left_ys8vpi.jpg"
           alt="Padel player on red court"
-          class="w-full h-auto object-cover"
+          class="absolute inset-0 w-full h-full object-cover object-top"
           loading="eager"
         />
         <img
           src="https://res.cloudinary.com/dkbcjhfiy/image/upload/v1774519542/this-title-for-left-asset_f8ao7d.png"
           alt=""
-          class="absolute inset-0 w-full h-full object-contain pointer-events-none"
+          class="absolute inset-0 w-full h-full object-cover object-top pointer-events-none"
         />
       </div>
       <!-- Right Asset -->
-      <div
-        class="relative w-full md:w-1/2 overflow-hidden shadow-2xl"
-      >
+      <div class="relative w-full md:w-1/2 overflow-hidden shadow-2xl">
         <img
           src="https://res.cloudinary.com/dkbcjhfiy/image/upload/v1774519542/web-asset-right-1_igiz5b.jpg"
           alt="Padel player on blue court"
-          class="w-full h-auto object-cover"
+          class="w-full h-full object-cover object-top"
           loading="eager"
         />
         <img
           src="https://res.cloudinary.com/dkbcjhfiy/image/upload/v1774519542/this-title-for-right-asset_xwqg5g.png"
           alt=""
-          class="absolute inset-0 w-full h-full object-contain pointer-events-none"
+          class="absolute inset-0 w-full h-full object-cover object-top pointer-events-none"
         />
       </div>
     </div>

@@ -108,7 +108,7 @@ const bookButtonOffset: Record<string, string> = {
             class="absolute left-0 top-full mt-0 min-w-[200px] flex flex-col gap-3 opacity-0 invisible translate-y-2 transition-all duration-200 z-50 pt-4"
           >
             <a
-              href={`/${locale}#open-play`}
+              href={`/${locale}/events`}
               class={`block font-medium text-[var(--color-brand-blue)] opacity-70 hover:opacity-100 hover:text-white transition-all whitespace-nowrap ${locale === "ka" ? "text-lg" : "text-base"}`}
               >{t["nav.events.openPlay"]}</a
             >
@@ -120,7 +120,7 @@ const bookButtonOffset: Record<string, string> = {
           </div>
         </div>
         <a
-          href={`/${locale}#coaching`}
+          href={`/${locale}/coaching`}
           class="nav-link-awwwards text-[var(--color-brand-red)]"
           data-text={t["nav.coaching"]}><span>{t["nav.coaching"]}</span></a
         >
@@ -263,7 +263,7 @@ const bookButtonOffset: Record<string, string> = {
           class="hidden pl-4 mt-2 flex flex-col space-y-2 border-l-2 border-[var(--color-brand-blue)]"
         >
           <a
-            href={`/${locale}#open-play`}
+            href={`/${locale}/events`}
             class="text-lg text-[var(--color-brand-blue)] opacity-70 hover:opacity-100 hover:text-white transition-all whitespace-nowrap"
             >{t["nav.events.openPlay"]}</a
           >
@@ -275,7 +275,7 @@ const bookButtonOffset: Record<string, string> = {
         </div>
       </div>
       <a
-        href={`/${locale}#coaching`}
+        href={`/${locale}/coaching`}
         class="nav-link-awwwards text-2xl font-bold text-[var(--color-brand-red)]"
         data-text={t["nav.coaching"]}><span>{t["nav.coaching"]}</span></a
       >
