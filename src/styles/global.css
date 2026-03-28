@@ -252,7 +252,7 @@ main::-webkit-scrollbar {
 
 @media (min-width: 768px) {
   #scroll-indicator {
-    bottom: 10rem;
+    bottom: 8.5rem;
   }
 }
 
