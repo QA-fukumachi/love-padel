@@ -301,8 +301,16 @@ const {
         }
 
         // Initialize state on load safely triggering fade
-        setTimeout(evaluateScrollIndicatorSpace, 150);
+        evaluateScrollIndicatorSpace();
         window.addEventListener('resize', evaluateScrollIndicatorSpace);
+        
+        // Using a ResizeObserver perfectly handles the slight delay when the hero's spacer images 
+        // stream over the network, ensuring the scroll indicator recalculates its exact center
+        const heroAssetsForObserver = document.querySelector('.hero-assets');
+        if (heroAssetsForObserver && window.ResizeObserver) {
+          const ro = new ResizeObserver(() => evaluateScrollIndicatorSpace());
+          ro.observe(heroAssetsForObserver);
+        }
 
         mainEl.addEventListener(
           "scroll",
