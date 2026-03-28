@@ -211,7 +211,7 @@ const bookButtonOffset: Record<string, string> = {
       <div id="about-dropdown-mobile">
         <button
           type="button"
-          class="nav-link-awwwards text-2xl font-bold text-[var(--color-brand-blue)] w-full text-left"
+          class={`nav-link-awwwards text-2xl font-bold text-[var(--color-brand-blue)] w-full text-left ${locale === "ka" ? "font-nino uppercase" : ""}`}
           id="about-dropdown-btn-mobile"
           data-text={t["nav.about"]}
         >
@@ -252,7 +252,7 @@ const bookButtonOffset: Record<string, string> = {
       <div id="events-dropdown-mobile">
         <button
           type="button"
-          class="nav-link-awwwards text-2xl font-bold text-[var(--color-brand-blue)] w-full text-left"
+          class={`nav-link-awwwards text-2xl font-bold text-[var(--color-brand-blue)] w-full text-left ${locale === "ka" ? "font-nino uppercase" : ""}`}
           id="events-dropdown-btn-mobile"
           data-text={t["nav.events"]}
         >

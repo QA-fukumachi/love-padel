@@ -110,17 +110,13 @@ const {
       {
         !hideScrollIndicator && (
           <div id="scroll-indicator" aria-hidden="true">
-            <div class="si-mouse">
-              <div class="si-dot" />
+            <!-- Universal Horizontal Text + Arrow -->
+            <div class="flex flex-row items-center gap-2 md:gap-3">
+              <span class="text-[0.65rem] md:text-xs tracking-[0.2em] font-medium uppercase text-white/60">scroll down</span>
+              <svg class="w-4 h-4 md:w-5 md:h-5 text-white/60 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              </svg>
             </div>
-            <div class="si-chevrons">
-              <>
-                <i />
-                <i />
-                <i />
-              </>
-            </div>
-            <span>scroll</span>
           </div>
         )
       }
@@ -243,6 +239,71 @@ const {
         // Initialize state on load
         updateFooter();
 
+        function evaluateScrollIndicatorSpace() {
+          if (!scrollIndicator || !mainEl || indicatorHidden) return;
+          const heroAssets = document.querySelector('.hero-assets');
+          const footerEl = document.querySelector('footer');
+          
+          if (heroAssets && footerEl) {
+            const heroRect = heroAssets.getBoundingClientRect();
+            const footerRect = footerEl.getBoundingClientRect();
+            
+            // Normalize hero bottom to act as if user is purely at the top of the page smoothly
+            const staticHeroBottom = heroRect.bottom + mainEl.scrollTop;
+            
+            let boundaryBottom = window.innerHeight;
+            let footerVisibleHeight = 0;
+            
+            const isRelativeFooter = document.body.dataset.relativeFooter === "true";
+            const hideFooterAtTop = document.body.dataset.hideFooterAtTop === "true";
+            const footerContainer = document.getElementById('footer-container');
+
+            // Treat the layout as if we are purely at scrollTop = 0, immune to mid-scroll animation states
+            if (!isRelativeFooter && !hideFooterAtTop && footerContainer) {
+              // Footer is floating and meant to be visible at the top, so we confidently block out its height
+              const fRect = footerContainer.getBoundingClientRect();
+              footerVisibleHeight = fRect.height;
+              boundaryBottom = window.innerHeight - footerVisibleHeight;
+            } else if (isRelativeFooter) {
+              // Footer is in standard document flow
+              const staticFooterTop = footerRect.top + mainEl.scrollTop;
+              if (staticFooterTop < window.innerHeight) {
+                boundaryBottom = staticFooterTop;
+                footerVisibleHeight = window.innerHeight - staticFooterTop;
+              }
+            }
+
+            const spaceBelow = boundaryBottom - staticHeroBottom;
+            
+            // Require at least 60px space between the bottom of the images and the footer for the new horizontal indicator
+            if (spaceBelow < 60) {
+              scrollIndicator.style.display = 'none';
+            } else {
+              scrollIndicator.style.display = 'flex';
+              
+              // Trigger smooth initial load fade-in cleanly off the base CSS class state
+              requestAnimationFrame(() => {
+                scrollIndicator.style.opacity = "1";
+                scrollIndicator.style.transform = "translateX(-50%) translateY(0)";
+              });
+
+              // Center it between the images and the footer
+              if (footerVisibleHeight > 0) {
+                // Adjusting center offset slightly for the narrower horizontal layout
+                const offset = 12;
+                const middle = footerVisibleHeight + (spaceBelow / 2) - offset;
+                scrollIndicator.style.bottom = `${middle}px`;
+              } else {
+                scrollIndicator.style.bottom = window.innerWidth <= 768 ? '3.5rem' : '8.5rem';
+              }
+            }
+          }
+        }
+
+        // Initialize state on load safely triggering fade
+        setTimeout(evaluateScrollIndicatorSpace, 150);
+        window.addEventListener('resize', evaluateScrollIndicatorSpace);
+
         mainEl.addEventListener(
           "scroll",
           () => {
@@ -253,14 +314,22 @@ const {
                 : (scrollTop / (scrollHeight - clientHeight)) * 100;
             progressBar.style.width = pct + "%";
 
-            // Hide scroll indicator once user starts scrolling
-            if (!indicatorHidden && scrollTop > 40 && scrollIndicator) {
-              indicatorHidden = true;
-              scrollIndicator.style.transition =
-                "opacity 0.6s ease, transform 0.6s ease";
-              scrollIndicator.style.opacity = "0";
-              scrollIndicator.style.transform =
-                "translateX(-50%) translateY(12px)";
+            // Handle bi-directional fading for the fixed scroll indicator robustly relying on base CSS transitions
+            if (scrollIndicator) {
+              if (!indicatorHidden && scrollTop > 40) {
+                indicatorHidden = true;
+                scrollIndicator.style.opacity = "0";
+                scrollIndicator.style.transform = "translateX(-50%) translateY(12px)";
+                scrollIndicator.style.pointerEvents = "none";
+              } else if (indicatorHidden && scrollTop <= 40) {
+                indicatorHidden = false;
+                scrollIndicator.style.opacity = "1";
+                scrollIndicator.style.transform = "translateX(-50%) translateY(0)";
+                scrollIndicator.style.pointerEvents = "auto";
+                
+                // Re-calculate the layout constraints safely relative to new static coords
+                evaluateScrollIndicatorSpace();
+              }
             }
 
             if (!isRelativeFooter) {

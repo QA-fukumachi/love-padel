@@ -19,7 +19,7 @@ const t = getTranslations(locale);
   image="/images/hero-bg.png"
 >
   <div
-    class="relative w-full min-h-screen flex-grow overflow-hidden flex flex-col justify-start items-center pt-16 pb-8 md:pt-2 md:pb-52"
+    class="relative w-full min-h-[100dvh] flex-grow overflow-hidden flex flex-col justify-start items-center pt-16 pb-8 md:pt-2 md:pb-52"
   >
     <!-- Hero Background Image -->
     <div
@@ -30,10 +30,10 @@ const t = getTranslations(locale);
 
     <!-- Hero Assets: Left & Right -->
     <div
-      class="relative z-10 w-full max-w-[1600px] mx-auto px-4 md:px-6 lg:px-12 flex flex-col md:flex-row items-stretch justify-center gap-4 md:gap-6 lg:gap-8"
+      class="hero-assets relative z-10 w-full max-w-[1600px] mx-auto px-4 md:px-6 lg:px-12 flex flex-col md:flex-row items-stretch justify-center gap-4 md:gap-6 lg:gap-8"
     >
       <!-- Left Asset -->
-      <div class="relative w-full md:w-1/2 overflow-hidden shadow-2xl">
+      <div class="relative w-full md:w-1/2 overflow-hidden shadow-2xl max-h-[36dvh] sm:max-h-[38dvh] md:max-h-none">
         <!-- Spacer to match right aspect ratio exactly -->
         <img
           src="https://res.cloudinary.com/dkbcjhfiy/image/upload/v1774519542/web-asset-right-1_igiz5b.jpg"
@@ -55,11 +55,19 @@ const t = getTranslations(locale);
         />
       </div>
       <!-- Right Asset -->
-      <div class="relative w-full md:w-1/2 overflow-hidden shadow-2xl">
+      <div class="relative w-full md:w-1/2 overflow-hidden shadow-2xl max-h-[36dvh] sm:max-h-[38dvh] md:max-h-none">
+        <!-- Spacer to match left aspect ratio exactly -->
+        <img
+          src="https://res.cloudinary.com/dkbcjhfiy/image/upload/v1774519542/web-asset-right-1_igiz5b.jpg"
+          alt=""
+          class="w-full h-auto invisible pointer-events-none"
+          aria-hidden="true"
+        />
+        <!-- Real Image -->
         <img
           src="https://res.cloudinary.com/dkbcjhfiy/image/upload/v1774519542/web-asset-right-1_igiz5b.jpg"
           alt="Padel player on blue court"
-          class="w-full h-full object-cover object-top"
+          class="absolute inset-0 w-full h-full object-cover object-top"
           loading="eager"
         />
         <img
