@@ -443,32 +443,46 @@ const bookButtonOffset: Record<string, string> = {
           // Smooth scroll the custom scroll container
           const mainScroll = document.getElementById("main-scroll");
           if (mainScroll) {
-            // Calculate absolute position relative to the scroll container
-            const targetPos = targetElement.offsetTop;
-
-            // Custom sexy easing function instead of boring CSS smooth
-            const startPos = mainScroll.scrollTop;
-            const distance = targetPos - startPos;
-            const duration = 800; // ms
-            let start: number | null = null;
-
-            function easeOutQuart(t: number): number {
-              return 1 - --t * t * t * t;
+            // Always proactively hide the scroll indicator the moment any anchor link is
+            // clicked — regardless of scroll distance. On first visit, hero images
+            // haven't loaded yet so offsetTop is near-zero, the animation barely scrolls,
+            // and scrollTop never exceeds 40px, leaving the indicator visible.
+            const scrollIndicator = document.getElementById("scroll-indicator");
+            if (scrollIndicator) {
+              scrollIndicator.style.opacity = "0";
+              scrollIndicator.style.transform = "translateX(-50%) translateY(12px)";
+              scrollIndicator.style.pointerEvents = "none";
+              // Mark as hidden so ResizeObserver/evaluateScrollIndicatorSpace won't re-show it
+              scrollIndicator.dataset.navHidden = "true";
             }
 
-            function animation(currentTime: number) {
-              if (start === null) start = currentTime;
-              const timeElapsed = currentTime - start;
-              const progress = Math.min(timeElapsed / duration, 1);
+            // Defer the target position calculation by one rAF so the browser has
+            // resolved any pending reflows from image loads before we measure offsetTop.
+            requestAnimationFrame(() => {
+              const targetPos = targetElement.offsetTop;
+              const startPos = mainScroll!.scrollTop;
+              const distance = targetPos - startPos;
+              const duration = 800; // ms
+              let start: number | null = null;
 
-              mainScroll!.scrollTop =
-                startPos + distance * easeOutQuart(progress);
-
-              if (timeElapsed < duration) {
-                requestAnimationFrame(animation);
+              function easeOutQuart(t: number): number {
+                return 1 - --t * t * t * t;
               }
-            }
-            requestAnimationFrame(animation);
+
+              function animation(currentTime: number) {
+                if (start === null) start = currentTime;
+                const timeElapsed = currentTime - start;
+                const progress = Math.min(timeElapsed / duration, 1);
+
+                mainScroll!.scrollTop =
+                  startPos + distance * easeOutQuart(progress);
+
+                if (timeElapsed < duration) {
+                  requestAnimationFrame(animation);
+                }
+              }
+              requestAnimationFrame(animation);
+            });
           }
         }
       }

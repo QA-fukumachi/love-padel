@@ -241,6 +241,10 @@ const {
 
         function evaluateScrollIndicatorSpace() {
           if (!scrollIndicator || !mainEl || indicatorHidden) return;
+          // Don't re-show if a nav anchor click is driving the scroll
+          if (scrollIndicator.dataset.navHidden === 'true') return;
+          // Don't re-show if user is scrolled past the hero threshold
+          if (mainEl.scrollTop > 40) return;
           const heroAssets = document.querySelector('.hero-assets');
           const footerEl = document.querySelector('footer');
           
@@ -281,10 +285,12 @@ const {
             } else {
               scrollIndicator.style.display = 'flex';
               
-              // Trigger smooth initial load fade-in cleanly off the base CSS class state
+              // Trigger smooth initial load fade-in — but only if still at the top and not nav-hidden
               requestAnimationFrame(() => {
-                scrollIndicator.style.opacity = "1";
-                scrollIndicator.style.transform = "translateX(-50%) translateY(0)";
+                if (mainEl!.scrollTop > 40) return;
+                if (scrollIndicator!.dataset.navHidden === 'true') return;
+                scrollIndicator!.style.opacity = "1";
+                scrollIndicator!.style.transform = "translateX(-50%) translateY(0)";
               });
 
               // Center it between the images and the footer
@@ -331,6 +337,11 @@ const {
                 scrollIndicator.style.pointerEvents = "none";
               } else if (indicatorHidden && scrollTop <= 40) {
                 indicatorHidden = false;
+                // Clear the nav-hidden flag so that if user scrolls back to top,
+                // the indicator can show again normally
+                if (scrollIndicator.dataset.navHidden === 'true') {
+                  scrollIndicator.dataset.navHidden = 'false';
+                }
                 scrollIndicator.style.opacity = "1";
                 scrollIndicator.style.transform = "translateX(-50%) translateY(0)";
                 scrollIndicator.style.pointerEvents = "auto";
