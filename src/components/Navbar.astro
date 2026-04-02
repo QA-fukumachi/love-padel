@@ -77,6 +77,11 @@ const bookButtonOffset: Record<string, string> = {
               >{t["nav.about.aboutPadel"]}</a
             >
             <a
+              href={`/${locale}#how-to-play`}
+              class={`block font-medium text-[var(--color-brand-blue)] opacity-70 hover:opacity-100 hover:text-white transition-all whitespace-nowrap ${locale === "ka" ? "text-lg" : "text-base"}`}
+              >{t["nav.about.howToPlay"]}</a
+            >
+            <a
               href={`/${locale}#contact-us`}
               class={`block font-medium text-[var(--color-brand-blue)] opacity-70 hover:opacity-100 hover:text-white transition-all whitespace-nowrap ${locale === "ka" ? "text-lg" : "text-base"}`}
               >{t["nav.about.contactUs"]}</a
@@ -236,6 +241,11 @@ const bookButtonOffset: Record<string, string> = {
             >{t["nav.about.aboutPadel"]}</a
           >
           <a
+            href={`/${locale}#how-to-play`}
+            class="text-lg text-[var(--color-brand-blue)] opacity-70 hover:opacity-100 hover:text-white transition-all whitespace-nowrap"
+            >{t["nav.about.howToPlay"]}</a
+          >
+          <a
             href={`/${locale}#contact-us`}
             class="text-lg text-[var(--color-brand-blue)] opacity-70 hover:opacity-100 hover:text-white transition-all whitespace-nowrap"
             >{t["nav.about.contactUs"]}</a
@@ -333,10 +343,13 @@ const bookButtonOffset: Record<string, string> = {
     }
   }
   function collapseHeader() {
-    if (mainHeader) mainHeader.classList.remove("pb-16", "md:pb-20");
+    if (mainHeader) mainHeader.classList.remove("pb-16", "md:pb-20", "pb-28", "md:pb-32");
   }
-  function expandHeader() {
-    if (mainHeader) mainHeader.classList.add("pb-16", "md:pb-20");
+  function expandHeaderAbout() {
+    if (mainHeader) { mainHeader.classList.remove("pb-16", "md:pb-20"); mainHeader.classList.add("pb-28", "md:pb-32"); }
+  }
+  function expandHeaderEvents() {
+    if (mainHeader) { mainHeader.classList.remove("pb-28", "md:pb-32"); mainHeader.classList.add("pb-16", "md:pb-20"); }
   }
 
   if (deskBtn && deskMenu) {
@@ -350,7 +363,7 @@ const bookButtonOffset: Record<string, string> = {
       } else {
         deskMenu.classList.remove("opacity-0", "invisible", "translate-y-2");
         deskMenu.classList.add("opacity-100", "visible", "translate-y-0");
-        expandHeader();
+        expandHeaderAbout();
       }
     });
   }
@@ -366,7 +379,7 @@ const bookButtonOffset: Record<string, string> = {
       } else {
         evtDeskMenu.classList.remove("opacity-0", "invisible", "translate-y-2");
         evtDeskMenu.classList.add("opacity-100", "visible", "translate-y-0");
-        expandHeader();
+        expandHeaderEvents();
       }
     });
   }

@@ -33,7 +33,9 @@ const t = getTranslations(locale);
       class="hero-assets relative z-10 w-full max-w-[1600px] mx-auto px-4 md:px-6 lg:px-12 flex flex-col md:flex-row items-stretch justify-center gap-4 md:gap-6 lg:gap-8"
     >
       <!-- Left Asset -->
-      <div class="relative w-full md:w-1/2 overflow-hidden shadow-2xl max-h-[36dvh] sm:max-h-[38dvh] md:max-h-none">
+      <div
+        class="relative w-full md:w-1/2 overflow-hidden shadow-2xl max-h-[36dvh] sm:max-h-[38dvh] md:max-h-none"
+      >
         <!-- Spacer to match right aspect ratio exactly -->
         <img
           src="https://res.cloudinary.com/dkbcjhfiy/image/upload/v1774519542/web-asset-right-1_igiz5b.jpg"
@@ -55,7 +57,9 @@ const t = getTranslations(locale);
         />
       </div>
       <!-- Right Asset -->
-      <div class="relative w-full md:w-1/2 overflow-hidden shadow-2xl max-h-[36dvh] sm:max-h-[38dvh] md:max-h-none">
+      <div
+        class="relative w-full md:w-1/2 overflow-hidden shadow-2xl max-h-[36dvh] sm:max-h-[38dvh] md:max-h-none"
+      >
         <!-- Spacer to match left aspect ratio exactly -->
         <img
           src="https://res.cloudinary.com/dkbcjhfiy/image/upload/v1774519542/web-asset-right-1_igiz5b.jpg"
@@ -171,7 +175,98 @@ const t = getTranslations(locale);
     </div>
   </section>
 
+  {/* HOW TO PLAY Section */}
+  <section
+    id="how-to-play"
+    class="w-full bg-black py-20 border-t border-gray-900"
+  >
+    <div class="max-w-[1600px] mx-auto px-6 lg:px-12">
+      <div class="mb-12">
+        <h2
+          class="text-4xl md:text-5xl font-bold text-[var(--color-brand-blue)] mb-2 tracking-tight uppercase"
+        >
+          {t["howToPlay.title"]}
+        </h2>
+      </div>
+
+      {/* Scoring System */}
+      <div class="mb-12">
+        <h3
+          class="text-2xl font-bold text-[var(--color-brand-blue)] mb-6 uppercase tracking-wide border-b border-gray-800 pb-3"
+        >
+          {t["howToPlay.scoring.title"]}
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+          {
+            [
+              { num: 1, key: "howToPlay.rule1" },
+              { num: 2, key: "howToPlay.rule2" },
+              { num: 3, key: "howToPlay.rule3" },
+              { num: 4, key: "howToPlay.rule4" },
+            ].map(({ num, key }) => (
+              <div class="flex gap-4 bg-gray-950 border border-gray-800 rounded-xl p-5 hover:border-gray-700 transition-colors">
+                <span class="flex-shrink-0 w-9 h-9 rounded-full bg-[var(--color-brand-red)] text-white text-sm font-bold flex items-center justify-center">
+                  {num}
+                </span>
+                <p class="text-gray-400 text-base leading-relaxed">{t[key as keyof typeof t]}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Serve */}
+      <div class="mb-12">
+        <h3
+          class="text-2xl font-bold text-[var(--color-brand-blue)] mb-6 uppercase tracking-wide border-b border-gray-800 pb-3"
+        >
+          {t["howToPlay.serve.title"]}
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {
+            [
+              { num: 5, key: "howToPlay.rule5" },
+              { num: 6, key: "howToPlay.rule6" },
+            ].map(({ num, key }) => (
+              <div class="flex gap-4 bg-gray-950 border border-gray-800 rounded-xl p-5 hover:border-gray-700 transition-colors">
+                <span class="flex-shrink-0 w-9 h-9 rounded-full bg-[var(--color-brand-red)] text-white text-sm font-bold flex items-center justify-center">
+                  {num}
+                </span>
+                <p class="text-gray-400 text-base leading-relaxed">{t[key as keyof typeof t]}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {/* Game Etiquette */}
+      <div>
+        <h3
+          class="text-2xl font-bold text-[var(--color-brand-blue)] mb-6 uppercase tracking-wide border-b border-gray-800 pb-3"
+        >
+          {t["howToPlay.etiquette.title"]}
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {
+            [
+              { num: 7, key: "howToPlay.rule7" },
+              { num: 8, key: "howToPlay.rule8" },
+            ].map(({ num, key }) => (
+              <div class="flex gap-4 bg-gray-950 border border-gray-800 rounded-xl p-5 hover:border-gray-700 transition-colors">
+                <span class="flex-shrink-0 w-9 h-9 rounded-full bg-[var(--color-brand-red)] text-white text-sm font-bold flex items-center justify-center">
+                  {num}
+                </span>
+                <p class="text-gray-400 text-base leading-relaxed">{t[key as keyof typeof t]}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
   {/* CONTACT US Section */}
+
   <section
     id="contact-us"
     class="w-full bg-black py-20 border-t border-gray-900"

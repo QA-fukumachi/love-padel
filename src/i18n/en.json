@@ -4,6 +4,7 @@
     "nav.about.aboutPadel": "About padel",
     "nav.about.contactUs": "Contact us",
     "nav.about.faq": "FAQ",
+    "nav.about.howToPlay": "How to play",
     "nav.book": "Book now",
     "nav.events": "Events",
     "nav.events.openPlay": "Open Play",
@@ -134,5 +135,19 @@
     "events.openPlay.socials.desc": "Our Social events combine padel with a vibrant community vibe. Expect music, good energy, and a mix of casual games designed for fun and connection. Whether you’re here to play, meet new people, or simply enjoy the atmosphere, Socials are the perfect way to experience the club off the court as well.",
     "events.openPlay.outro1": "Join us and be part of a welcoming padel community where every session is as social as it is sporty.",
     "events.openPlay.outro2": "You can reserve your spot easily through the Events section of our online booking system.",
-    "events.openPlay.imageAlt": "Padel open play session at our club"
+    "events.openPlay.imageAlt": "Padel open play session at our club",
+
+    "howToPlay.title": "HOW TO PLAY",
+    "howToPlay.subtitle": "Padel Rules",
+    "howToPlay.scoring.title": "Scoring System",
+    "howToPlay.rule1": "Padel uses the same scoring system as tennis. A match consists of three sets. Points are counted as 15, 30, 40, followed by deuce and advantage. In professional padel, at 40–40 a Golden Point is often used instead of advantage.",
+    "howToPlay.rule2": "As in tennis, players switch sides on odd-numbered games (1–0, 2–1, 3–2, 4–3, 5–4, etc.).",
+    "howToPlay.rule3": "Any player can hit the ball from anywhere on the court, except during the serve.",
+    "howToPlay.rule4": "For a point to count, the ball must first bounce on the ground before hitting a wall. The only exception is the serve. After the bounce on a serve, the ball may only hit the glass wall not the fence. During rallies, the ball may hit both glass walls and fences. Players can hit the ball either before it bounces or after it bounces, depending on the situation.",
+    "howToPlay.serve.title": "Serve",
+    "howToPlay.rule5": "The serve is made from behind the service line. The first serve starts from the right side. The player has two attempts. As in tennis, the serve must be diagonal. Unlike tennis, the ball is not hit overhead. In padel, the player must strike the ball below waist level, around hip height.",
+    "howToPlay.rule6": "If the first serve hits the net or is otherwise invalid, the player may serve again. If the ball hits the net and then does not land in the opponent's diagonal service box, the serve is considered a fault.",
+    "howToPlay.etiquette.title": "Game Etiquette",
+    "howToPlay.rule7": "A player is not allowed to start play until all players are in position and ready.",
+    "howToPlay.rule8": "If you touch the net with your racket, clothing, or body during play, your opponent wins the point."
 }
