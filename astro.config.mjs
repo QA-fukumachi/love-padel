@@ -12,4 +12,10 @@ export default defineConfig({
         plugins: [tailwindcss()],
     },
     integrations: [astroI18next(), sitemap()],
+    redirects: {
+        '/': {
+            destination: '/en/',
+            status: 301,
+        },
+    },
 });

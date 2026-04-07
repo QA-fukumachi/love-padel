@@ -196,7 +196,8 @@ const t = getTranslations(locale);
         >
           {t["howToPlay.scoring.title"]}
         </h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+        {/* Mobile View: Single Column */}
+        <div class="flex flex-col gap-4 md:hidden">
           {
             [
               { num: 1, key: "howToPlay.rule1" },
@@ -214,6 +215,44 @@ const t = getTranslations(locale);
               </div>
             ))
           }
+        </div>
+
+        {/* Desktop View: Two Columns */}
+        <div class="hidden md:grid md:grid-cols-2 gap-4 items-start">
+          <div class="flex flex-col gap-4">
+            {
+              [
+                { num: 1, key: "howToPlay.rule1" },
+                { num: 3, key: "howToPlay.rule3" },
+              ].map(({ num, key }) => (
+                <div class="flex gap-4 bg-gray-950 border border-gray-800 rounded-xl p-5 hover:border-gray-700 transition-colors">
+                  <span class="flex-shrink-0 w-9 h-9 rounded-full bg-[var(--color-brand-red)] text-white text-sm font-bold flex items-center justify-center">
+                    {num}
+                  </span>
+                  <p class="text-gray-400 text-base leading-relaxed">
+                    {t[key as keyof typeof t]}
+                  </p>
+                </div>
+              ))
+            }
+          </div>
+          <div class="flex flex-col gap-4">
+            {
+              [
+                { num: 2, key: "howToPlay.rule2" },
+                { num: 4, key: "howToPlay.rule4" },
+              ].map(({ num, key }) => (
+                <div class="flex gap-4 bg-gray-950 border border-gray-800 rounded-xl p-5 hover:border-gray-700 transition-colors">
+                  <span class="flex-shrink-0 w-9 h-9 rounded-full bg-[var(--color-brand-red)] text-white text-sm font-bold flex items-center justify-center">
+                    {num}
+                  </span>
+                  <p class="text-gray-400 text-base leading-relaxed">
+                    {t[key as keyof typeof t]}
+                  </p>
+                </div>
+              ))
+            }
+          </div>
         </div>
       </div>
 
