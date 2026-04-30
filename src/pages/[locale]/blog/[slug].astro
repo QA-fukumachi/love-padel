@@ -202,6 +202,8 @@ const isGeorgian = locale === "ka";
         <div class="flex flex-wrap justify-center gap-6 mt-4">
           {/* Facebook */}
           <button
+            onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href), 'facebook-share', 'width=580,height=296');"
+            aria-label="Share on Facebook"
             class="w-12 h-12 rounded-full border border-gray-700 flex items-center justify-center text-gray-400 hover:text-[var(--color-brand-blue)] hover:border-[var(--color-brand-blue)] transition-colors group"
           >
             <svg
@@ -215,6 +217,8 @@ const isGeorgian = locale === "ka";
           </button>
           {/* Instagram */}
           <button
+            onclick="shareToInstagram(this)"
+            aria-label="Share on Instagram"
             class="w-12 h-12 rounded-full border border-gray-700 flex items-center justify-center text-gray-400 hover:text-pink-500 hover:border-pink-500 transition-colors group"
           >
             <svg
@@ -387,6 +391,20 @@ const isGeorgian = locale === "ka";
   </script>
 
   <script is:inline>
+    function shareToInstagram(btn) {
+      if (navigator.share) {
+        navigator.share({
+          title: document.title,
+          url: window.location.href
+        }).catch(function (err) {
+          console.error("Error sharing:", err);
+        });
+      } else {
+        // Fallback to copy link if Web Share API is not supported
+        copyArticleLink(btn);
+      }
+    }
+
     function copyArticleLink(btn) {
       var url = window.location.href;
 
